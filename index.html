@@ -3,1227 +3,1213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fly营销智能体 - 2.09亿小老板的9人营销团队</title>
+    <title>Fly-Agent | 让你的店被Fly优先推荐</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-warm: #FFF9F5;
+            --bg-card: #FFFFFF;
+            --text-primary: #2D2926;
+            --text-secondary: #6B6560;
+            --accent-warm: #E85D4C;
+            --accent-coral: #FF8A70;
+            --accent-gold: #F5C563;
+            --accent-sage: #A8C5A8;
+            --shadow-soft: 0 4px 24px rgba(45, 41, 38, 0.06);
+            --shadow-hover: 0 8px 32px rgba(45, 41, 38, 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-warm);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
         }
+
         .container {
-            max-width: 1200px;
+            max-width: 1120px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 24px;
         }
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-            color: white;
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 249, 245, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(45, 41, 38, 0.05);
         }
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        .hero .subtitle {
-            font-size: 1.5rem;
-            opacity: 0.95;
-            margin-bottom: 30px;
-        }
-        .hero .stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
-            margin-top: 40px;
-        }
-        .stat-item {
-            background: rgba(255,255,255,0.15);
-            padding: 20px 30px;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-        }
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        /* Free Trial Badge */
-        .free-trial-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #00d4aa, #00b894);
-            color: white;
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 20px 0;
-            box-shadow: 0 4px 20px rgba(0,212,170,0.4);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        /* Comparison Section */
-        .comparison {
-            background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            margin: 40px 0;
-        }
-        .comparison h2 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            color: #1a1a2e;
-        }
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        .comparison-card {
-            padding: 30px;
-            border-radius: 16px;
-            text-align: center;
-        }
-        .comparison-card.traditional {
-            background: #fff5f5;
-            border: 2px solid #ffebee;
-        }
-        .comparison-card.competitor {
-            background: #fff8e1;
-            border: 2px solid #ffe082;
-        }
-        .comparison-card.ai-powered {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            border: 2px solid #00c853;
-        }
-        .comparison-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .comparison-item {
+
+        header .container {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            font-size: 0.95rem;
+            align-items: center;
+            height: 72px;
         }
-        .comparison-item:last-child {
-            border-bottom: none;
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
         }
-        .comparison-item .label {
-            color: #666;
+
+        .logo span {
+            color: var(--accent-warm);
         }
-        .comparison-item .value {
+
+        nav {
+            display: flex;
+            gap: 36px;
+            align-items: center;
+        }
+
+        nav a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        .btn-nav {
+            background: var(--text-primary);
+            color: var(--bg-warm) !important;
+            padding: 10px 22px;
+            border-radius: 100px;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 41, 38, 0.15);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 140%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(245, 197, 99, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(232, 93, 76, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            padding: 8px 16px 8px 10px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-sage);
+            border-radius: 50%;
+        }
+
+        .hero-badge span {
+            color: var(--accent-warm);
             font-weight: 600;
         }
-        .comparison-item .value.bad {
-            color: #e53935;
-        }
-        .comparison-item .value.medium {
-            color: #ff9800;
-        }
-        .comparison-item .value.good {
-            color: #00c853;
-        }
-        .cost-highlight {
-            font-size: 2rem;
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(48px, 10vw, 88px);
             font-weight: 700;
-            color: #667eea;
-            margin: 20px 0;
+            line-height: 1.05;
+            letter-spacing: -3px;
+            margin-bottom: 24px;
         }
-        .comparison-card.traditional .cost-highlight,
-        .comparison-card.competitor .cost-highlight {
-            color: #e53935;
+
+        .hero h1 .brand {
+            display: block;
+            font-size: clamp(56px, 12vw, 104px);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-warm) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        /* Features */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            padding: 40px 0;
+
+        .hero-slogan {
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            letter-spacing: 1px;
         }
-        .feature-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+
+        .hero-tagline {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 48px;
+            opacity: 0.8;
         }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-        .feature-icon {
+
+        .btn-primary {
+            background: var(--accent-warm);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #D64D3C;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(232, 93, 76, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 16px 36px;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1.5px solid rgba(45, 41, 38, 0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-primary);
+            background: rgba(45, 41, 38, 0.03);
+        }
+
+        /* Floating Elements */
+        .float-element {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .float-1 {
+            top: 20%;
+            left: 8%;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, rgba(245, 197, 99, 0.3) 100%);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: float1 8s ease-in-out infinite;
+        }
+
+        .float-2 {
+            bottom: 25%;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-coral) 0%, rgba(255, 138, 112, 0.3) 100%);
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation: float2 10s ease-in-out infinite;
+        }
+
+        .float-3 {
+            top: 35%;
+            right: 15%;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--accent-sage) 0%, rgba(168, 197, 168, 0.3) 100%);
+            border-radius: 50%;
+            animation: float3 6s ease-in-out infinite;
         }
-        .feature-card h3 {
-            font-size: 1.3rem;
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, -30px) rotate(10deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-25px, 15px) rotate(-15deg); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-15px, -20px) scale(1.1); }
+        }
+
+        /* Section Common */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-warm);
             margin-bottom: 12px;
-            color: #1a1a2e;
         }
-        .feature-card p {
-            color: #666;
-            font-size: 0.95rem;
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(32px, 5vw, 44px);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
-        /* New Feature Section */
-        .new-features {
-            background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            margin: 40px 0;
+
+        .section-desc {
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin-bottom: 60px;
         }
-        .new-features h2 {
+
+        .section-header {
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #1a1a2e;
+            margin-bottom: 64px;
         }
-        .new-features .section-desc {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        .new-features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-        .new-feature-item {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-            border-radius: 16px;
-            padding: 25px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-        .new-feature-item:hover {
-            transform: scale(1.02);
-        }
-        .new-feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-        .new-feature-item h4 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            color: #333;
-        }
-        .new-feature-item p {
-            font-size: 0.85rem;
-            color: #666;
-        }
-        /* Cases Section */
-        .cases {
-            background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            margin: 40px 0;
-        }
-        .cases h2 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            color: #1a1a2e;
-        }
-        .case-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-        .case-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            padding: 25px;
-            color: white;
-        }
-        .case-card h4 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        .case-card p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 15px;
-        }
-        .case-result {
-            background: rgba(255,255,255,0.2);
-            border-radius: 8px;
-            padding: 10px 15px;
-            display: inline-block;
-            font-weight: 600;
-        }
-        /* Pricing */
-        .pricing {
-            padding: 60px 0;
-        }
-        .pricing h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: white;
-            margin-bottom: 15px;
-        }
-        .pricing-subtitle {
-            text-align: center;
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-        }
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 900px;
+
+        .section-header .section-desc {
             margin: 0 auto;
         }
-        .price-card {
-            background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+
+        /* Products Section */
+        .products {
+            background: var(--bg-card);
         }
-        .price-card.popular {
-            border: 3px solid #00c853;
-            transform: scale(1.02);
-        }
-        .afdian-badge {
-            background: #607d8b;
-            color: white;
-        }
-        .popular-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #00c853, #00e676);
-            color: white;
-            padding: 6px 20px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .price-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        .price-tag {
-            display: inline-block;
-            background: #fff3e0;
-            color: #e65100;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-bottom: 15px;
-        }
-        .price {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #667eea;
-            margin: 20px 0;
-        }
-        .price span {
-            font-size: 1rem;
-            color: #999;
-        }
-        .free-trial-tag {
-            display: inline-block;
-            background: linear-gradient(135deg, #00d4aa, #00b894);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        .price-features {
-            list-style: none;
-            margin: 30px 0;
-            text-align: left;
-        }
-        .price-features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            color: #555;
-        }
-        .price-features li::before {
-            content: "✓ ";
-            color: #00c853;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        .buy-btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: block;
-        }
-        .buy-btn-coze {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-        .buy-btn-coze:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        .buy-btn-afdian {
-            background: #f5f5f5;
-            color: #333;
-        }
-        .buy-btn-afdian:hover {
-            background: #eee;
-        }
-        /* How it works */
-        .how-it-works {
-            background: white;
-            padding: 60px 30px;
-            border-radius: 24px;
-            margin: 40px 0;
-        }
-        .how-it-works h2 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 40px;
-        }
-        .steps {
+
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
         }
-        .step {
-            text-align: center;
+
+        @media (max-width: 900px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                max-width: 480px;
+                margin: 0 auto;
+            }
+        }
+
+        .product-card {
+            background: var(--bg-warm);
+            border-radius: 24px;
+            padding: 40px 32px;
             position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
         }
-        .step-number {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-radius: 50%;
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .product-card.geo::before { background: var(--accent-coral); }
+        .product-card.content::before { background: var(--accent-gold); }
+        .product-card.insight::before { background: var(--accent-sage); }
+
+        .product-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0 auto 15px;
+            font-size: 24px;
+            margin-bottom: 24px;
         }
-        .step h4 {
-            font-size: 1.1rem;
+
+        .product-card.geo .product-icon { background: rgba(255, 138, 112, 0.15); }
+        .product-card.content .product-icon { background: rgba(245, 197, 99, 0.15); }
+        .product-card.insight .product-icon { background: rgba(168, 197, 168, 0.15); }
+
+        .product-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
             margin-bottom: 8px;
         }
-        .step p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        /* Code demo */
-        .code-demo {
-            background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            margin: 40px 0;
-        }
-        .code-demo h3 {
-            color: #1a1a2e;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.5rem;
-        }
-        .chat-demo {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .chat-user, .chat-fly {
-            display: flex;
-            align-items: flex-start;
+
+        .product-card.geo .product-name { color: var(--accent-warm); }
+        .product-card.content .product-name { color: #C9A033; }
+        .product-card.insight .product-name { color: #6B9B6B; }
+
+        .product-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
             margin-bottom: 20px;
         }
-        .chat-fly {
-            flex-direction: row;
-        }
-        .chat-user {
-            flex-direction: row-reverse;
-        }
-        .chat-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
-        }
-        .chat-user .chat-avatar {
-            background: #e3f2fd;
-        }
-        .chat-fly .chat-avatar {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
-        .chat-bubble {
-            max-width: 75%;
-            padding: 15px 20px;
-            border-radius: 18px;
-            font-size: 0.95rem;
+
+        .product-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
             line-height: 1.7;
         }
-        .user-bubble {
-            background: #667eea;
-            color: white;
-            margin-right: 15px;
+
+        .product-tag {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 6px 14px;
+            background: var(--bg-card);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
         }
-        .fly-bubble {
-            background: #f5f7fa;
-            color: #333;
-            margin-left: 15px;
+
+        /* Tech Section */
+        .tech {
+            background: linear-gradient(180deg, var(--bg-warm) 0%, var(--bg-card) 100%);
         }
-        /* Platform Entry Section */
-        .platform-entry {
-            background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            margin: 40px 0;
-            text-align: center;
-        }
-        .platform-entry h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #1a1a2e;
-        }
-        .platform-entry .section-desc {
-            color: #666;
-            margin-bottom: 30px;
-        }
-        .platform-grid {
+
+        .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
         }
-        .platform-item {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            padding: 20px;
-            color: white;
-            text-decoration: none;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .platform-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-        .platform-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .platform-name {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        /* Social Media */
-        .social-media {
-            background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            margin: 40px 0;
-            text-align: center;
-        }
-        .social-media h2 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: #1a1a2e;
-        }
-        .social-media-subtitle {
-            color: #666;
-            margin-bottom: 30px;
-        }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        .social-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 30px;
-            border-radius: 16px;
-            text-decoration: none;
-            transition: transform 0.3s, box-shadow 0.3s;
-            min-width: 150px;
-        }
-        .social-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        .social-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        .social-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .social-desc {
-            font-size: 0.85rem;
-            color: #666;
-        }
-        .social-link.weibo {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-        }
-        .social-link.weibo .social-name,
-        .social-link.weibo .social-desc {
-            color: white;
-        }
-        .social-link.xiaohongshu {
-            background: linear-gradient(135deg, #fe2c55, #ff6b6b);
-            color: white;
-        }
-        .social-link.xiaohongshu .social-name,
-        .social-link.xiaohongshu .social-desc {
-            color: white;
-        }
-        .social-link.xianyu {
-            background: linear-gradient(135deg, #ff9500, #ff6b00);
-            color: white;
-        }
-        .social-link.xianyu .social-name,
-        .social-link.xianyu .social-desc {
-            color: white;
-        }
-        .social-link.afdian {
-            background: linear-gradient(135deg, #424242, #616161);
-            color: white;
-        }
-        .social-link.afdian .social-name,
-        .social-link.afdian .social-desc {
-            color: white;
-        }
-        .social-note {
-            margin-top: 20px;
-            color: #888;
-            font-size: 0.9rem;
-        }
-        /* CTA */
-        .cta {
-            text-align: center;
-            padding: 60px 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 24px;
-            margin: 40px 0;
-            backdrop-filter: blur(10px);
-        }
-        .cta h2 {
-            color: white;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-        .cta p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-        }
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .cta-btn {
-            padding: 16px 40px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .cta-btn-primary {
-            background: white;
-            color: #667eea;
-        }
-        .cta-btn-primary:hover {
-            transform: scale(1.05);
-        }
-        .cta-btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-        .cta-btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: rgba(255,255,255,0.8);
-            font-size: 0.9rem;
-        }
-        footer a {
-            color: white;
-            text-decoration: none;
-        }
-        /* Responsive */
+
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            .hero .subtitle {
-                font-size: 1.2rem;
-            }
-            .price-card.popular {
-                transform: scale(1);
-            }
-            .pricing-grid {
+            .tech-grid {
                 grid-template-columns: 1fr;
             }
         }
-    
-        /* Industry Endorsements */
-        .endorsements {
-            background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            margin: 40px 0;
+
+        .tech-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s;
         }
-        .endorsements h2 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            color: #1a1a2e;
+
+        .tech-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
         }
-        .endorsement-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+
+        .tech-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #F0EBE5 0%, #E8E2DB 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
         }
-        .endorsement-card {
-            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
-            border-radius: 16px;
-            padding: 24px;
-            border-left: 4px solid #667eea;
-        }
-        .endorsement-card .quote {
-            font-size: 1rem;
-            color: #333;
-            line-height: 1.6;
-            margin-bottom: 12px;
-            font-style: italic;
-        }
-        .endorsement-card .source {
-            font-size: 0.85rem;
-            color: #667eea;
+
+        .tech-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
             font-weight: 600;
+            margin-bottom: 10px;
         }
-        
-        /* Updated Pricing */
+
+        .tech-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .tech-highlight {
+            margin-top: 80px;
+            text-align: center;
+            padding: 48px;
+            background: linear-gradient(135deg, rgba(45, 41, 38, 0.03) 0%, rgba(45, 41, 38, 0.06) 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(45, 41, 38, 0.06);
+        }
+
+        .tech-highlight p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tech-highlight .domain {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .tech-highlight small {
+            font-size: 12px;
+            color: var(--accent-warm);
+            font-weight: 500;
+        }
+
+        /* Architecture */
+        .arch {
+            background: var(--bg-card);
+        }
+
+        .arch-layers {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 48px;
+        }
+
+        .arch-layer {
+            text-align: center;
+            padding: 24px 20px;
+            background: var(--bg-warm);
+            border-radius: 16px;
+            min-width: 140px;
+            transition: all 0.3s;
+        }
+
+        .arch-layer:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .arch-layer-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .arch-layer-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .arch-layer:nth-child(1) .arch-layer-name { color: var(--accent-warm); }
+        .arch-layer:nth-child(2) .arch-layer-name { color: var(--accent-coral); }
+        .arch-layer:nth-child(3) .arch-layer-name { color: var(--accent-gold); }
+        .arch-layer:nth-child(4) .arch-layer-name { color: var(--accent-sage); }
+        .arch-layer:nth-child(5) .arch-layer-name { color: #9B8EC4; }
+
+        /* Pricing Section */
+        .pricing {
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-warm) 100%);
+        }
+
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
-            margin-top: 20px;
+            align-items: stretch;
         }
-        .price-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
+
+        @media (max-width: 900px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 40px 32px;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
+            transition: all 0.4s;
+            border: 1px solid rgba(45, 41, 38, 0.06);
         }
-        .price-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
         }
-        .price-card.popular {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .price-card.popular:hover {
-            transform: translateY(-5px);
-        }
-        .price-card.enterprise {
-            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
-            color: white;
-        }
-        .price-card.enterprise:hover {
-            transform: translateY(-5px);
-        }
-        .price-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #1a1a2e;
-        }
-        .price-card.popular h3,
-        .price-card.enterprise h3 {
-            color: white;
-        }
-        .price {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #667eea;
-            margin: 15px 0;
-        }
-        .price span {
-            font-size: 1rem;
-            font-weight: 400;
-            color: #666;
-        }
-        .price-card.popular .price,
-        .price-card.popular .price span {
-            color: white;
-        }
-        .price-card.enterprise .price {
-            color: #00d4aa;
-        }
-        .price-card.enterprise .price span {
-            color: rgba(255,255,255,0.7);
-        }
-        .original-price {
-            text-decoration: line-through;
-            color: #e53935 !important;
-            font-size: 1.2rem !important;
-            margin-right: 8px;
-        }
-        .price-note {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 15px;
-        }
-        .price-card.popular .price-note,
-        .price-card.enterprise .price-note {
-            color: rgba(255,255,255,0.8);
-        }
-        .price-features {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-            text-align: left;
-        }
-        .price-features li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            font-size: 0.9rem;
-            color: #333;
-        }
-        .price-features li:last-child {
-            border-bottom: none;
-        }
-        .price-card.popular .price-features li,
-        .price-card.enterprise .price-features li {
-            color: rgba(255,255,255,0.95);
-            border-bottom-color: rgba(255,255,255,0.1);
-        }
-        .buy-btn {
-            width: 100%;
-            padding: 12px 24px;
+
+        .pricing-card.popular {
+            background: var(--text-primary);
+            color: var(--bg-warm);
             border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #f0f0f0;
-            color: #333;
         }
-        .buy-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+
+        .pricing-card.popular .pricing-price,
+        .pricing-card.popular .pricing-period {
+            color: var(--bg-warm);
         }
-        .buy-btn-primary {
-            background: white;
-            color: #667eea;
+
+        .pricing-card.popular .pricing-desc,
+        .pricing-card.popular .pricing-feature {
+            color: rgba(255, 249, 245, 0.7);
         }
-        .buy-btn-enterprise {
-            background: linear-gradient(135deg, #00d4aa, #00b894);
-            color: white;
-        }
-        .popular-badge {
+
+        .pricing-badge {
             position: absolute;
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: #ffd700;
-            color: #333;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            background: var(--accent-warm);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 100px;
+            font-size: 12px;
             font-weight: 600;
         }
-        .early-bird {
-            background: linear-gradient(135deg, #00d4aa, #00b894);
+
+        .pricing-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .pricing-price span {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .pricing-period {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .pricing-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            min-height: 42px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(45, 41, 38, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-card.popular .pricing-features li {
+            border-color: rgba(255, 249, 245, 0.1);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            width: 20px;
+            height: 20px;
+            background: rgba(168, 197, 168, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #6B9B6B;
+            flex-shrink: 0;
+        }
+
+        .pricing-card.popular .pricing-features li::before {
+            background: rgba(255, 249, 245, 0.15);
+            color: var(--accent-coral);
+        }
+
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            background: var(--bg-warm);
+            color: var(--text-primary);
+        }
+
+        .pricing-card.popular .pricing-btn {
+            background: var(--accent-warm);
             color: white;
         }
-        .afdian-badge {
-            background: #ff6b6b;
-            color: white;
+
+        .pricing-btn:hover {
+            transform: scale(1.02);
         }
-</style>
+
+        /* Footer */
+        footer {
+            background: var(--text-primary);
+            color: var(--bg-warm);
+            padding: 80px 0 40px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 48px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand .logo {
+            color: var(--bg-warm);
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: rgba(255, 249, 245, 0.6);
+            max-width: 280px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-links {
+                gap: 40px;
+                flex-wrap: wrap;
+            }
+        }
+
+        .footer-col h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: rgba(255, 249, 245, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            color: rgba(255, 249, 245, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--bg-warm);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 249, 245, 0.1);
+            padding-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: rgba(255, 249, 245, 0.5);
+        }
+
+        .footer-bottom .domain {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 14px;
+            color: rgba(255, 249, 245, 0.7);
+        }
+
+        /* Chain Badge */
+        .chain-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 249, 245, 0.08);
+            border-radius: 100px;
+            font-size: 12px;
+            color: rgba(255, 249, 245, 0.6);
+            margin-top: 24px;
+        }
+
+        .chain-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent-sage);
+            border-radius: 50%;
+        }
+
+        /* Simple Mobile Nav */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 100px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1px;
+            }
+
+            .section-header {
+                margin-bottom: 48px;
+            }
+
+            section {
+                padding: 64px 0;
+            }
+
+            .pricing-card.popular {
+                order: -1;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+
+            .footer-links {
+                width: 100%;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Hero -->
-        <section class="hero">
-            <h1>🚀 Fly营销智能体</h1>
-            <p class="subtitle">2.09亿小老板的9人营销团队</p>
-            <div class="free-trial-badge">🎁 首次使用免费体验1次</div>
-            <p>一键多平台发布 · 爆款追摹复制 · AI智能客服</p>
-            
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-number">9</div>
-                    <div class="stat-label">营销能力模块</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">16</div>
-                    <div class="stat-label">核心功能覆盖</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">10</div>
-                    <div class="stat-label">平台入驻支持</div>
-                </div>
-            </div>
-        </section>
+    <header>
+        <div class="container">
+            <div class="logo">Fly<span>-</span>Agent</div>
+            <nav>
+                <a href="#products">三件套</a>
+                <a href="#tech">技术</a>
+                <a href="#pricing">定价</a>
+                <a href="https://fly-agent.xyz" class="btn-nav">开始使用</a>
+            </nav>
+        </div>
+    </header>
 
-        <!-- Comparison -->
-        <section class="comparison">
-            <h2>Fly vs 竞品对比</h2>
-            <div class="comparison-table" style="overflow-x:auto;">
-                <table style="width:100%;border-collapse:collapse;margin-top:20px;">
-                    <thead>
-                        <tr style="background:#667eea;color:white;">
-                            <th style="padding:15px;border:1px solid #ddd;text-align:left;">对比维度</th>
-                            <th style="padding:15px;border:1px solid #ddd;text-align:center;background:#00c853;">Fly营销智能体</th>
-                            <th style="padding:15px;border:1px solid #ddd;text-align:center;">某全链路平台</th>
-                            <th style="padding:15px;border:1px solid #ddd;text-align:center;">某一句话驱动平台</th>
-                            <th style="padding:15px;border:1px solid #ddd;text-align:center;">某小红书授权工具</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="background:#f9f9f9;">
-                            <td style="padding:12px;border:1px solid #ddd;font-weight:600;">起步价</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;background:#e8f5e9;color:#00c853;font-weight:700;">免费</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">9,800+/年</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">几百+/月</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">1,000+/年</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:12px;border:1px solid #ddd;font-weight:600;">使用方式</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;background:#e8f5e9;color:#00c853;">对话即用</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">SaaS后台</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">小程序+PC</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">SaaS后台</td>
-                        </tr>
-                        <tr style="background:#f9f9f9;">
-                            <td style="padding:12px;border:1px solid #ddd;font-weight:600;">上手难度</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;background:#e8f5e9;color:#00c853;font-weight:700;">0门槛</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;color:#e53935;">需培训</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">5分钟</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;color:#e53935;">需配置</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:12px;border:1px solid #ddd;font-weight:600;">数字人</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;background:#e8f5e9;"><span style="color:#00c853;">有</span></td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">有</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">有</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;color:#999;">无</td>
-                        </tr>
-                        <tr style="background:#f9f9f9;">
-                            <td style="padding:12px;border:1px solid #ddd;font-weight:600;">一键发布</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;background:#e8f5e9;"><span style="color:#00c853;">有</span></td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">有</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">有</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;color:#999;">无</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:12px;border:1px solid #ddd;font-weight:600;">记忆系统</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;background:#e8f5e9;"><span style="color:#00c853;">有</span></td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;color:#999;">无</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">有</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;color:#999;">无</td>
-                        </tr>
-                        <tr style="background:#f9f9f9;">
-                            <td style="padding:12px;border:1px solid #ddd;font-weight:600;">私域转化</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;background:#e8f5e9;"><span style="color:#00c853;">有</span></td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">有</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">有</td>
-                            <td style="padding:12px;border:1px solid #ddd;text-align:center;">有(小红书)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:16px;padding:25px;margin-top:30px;text-align:center;">
-                <h3 style="color:#1a1a2e;margin-bottom:15px;">为什么选择Fly营销智能体</h3>
-                <p style="color:#333;font-size:1.1rem;margin-bottom:10px;"><strong>对话即界面，不用学后台，说句话就开干</strong></p>
-                <p style="color:#666;">小老板用得起的AI营销智能体 | 9人团队16项能力，一个对话框搞定</p>
-            </div>
-        </section>
-
-        <!-- Features -->
-        <section class="features">
-            <div class="feature-card">
-                <div class="feature-icon">📝</div>
-                <h3>小红书爆款笔记</h3>
-                <p>自动分析爆款规律，一键生成高互动率笔记，支持多风格定制</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎬</div>
-                <h3>抖音短视频脚本</h3>
-                <p>专业脚本创作，钩子开头+高潮+引导，关注转化率提升</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h3>朋友圈文案</h3>
-                <p>温暖有温度的文案，自动配图建议，让顾客主动转发</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🏪</div>
-                <h3>多平台一键发布</h3>
-                <p>同时适配小红书、抖音、微信等平台，一次生成多端适配</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔥</div>
-                <h3>爆款追摹复制</h3>
-                <p>输入链接自动分析爆款元素，生成专属你的爆款内容</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">💬</div>
-                <h3>AI智能客服</h3>
-                <p>自动回复常见问题，7×24小时在线，提升客户满意度</p>
-            </div>
-        </section>
-
-        <!-- New Features -->
-        <section class="new-features">
-            <h2>8大核心能力模块</h2>
-            <p class="section-desc">覆盖营销全链路，一个AI搞定9人团队的所有工作</p>
-            <div class="new-features-grid">
-                <div class="new-feature-item">
-                    <div class="new-feature-icon">🎥</div>
-                    <h4>智能混剪</h4>
-                    <p>AI自动剪辑视频素材，多版本适配各平台</p>
-                </div>
-                <div class="new-feature-item">
-                    <div class="new-feature-icon">💬</div>
-                    <h4>评论区种草</h4>
-                    <p>智能生成种草评论，引流私域提升转化</p>
-                </div>
-                <div class="new-feature-item">
-                    <div class="new-feature-icon">👤</div>
-                    <h4>AI数字人</h4>
-                    <p>虚拟主播形象，24小时自动播报</p>
-                </div>
-                <div class="new-feature-item">
-                    <div class="new-feature-icon">📊</div>
-                    <h4>矩阵管理</h4>
-                    <p>多账号统一管理，数据集中分析</p>
-                </div>
-                <div class="new-feature-item">
-                    <div class="new-feature-icon">🌏</div>
-                    <h4>出海获客</h4>
-                    <p>多语言内容生成，海外平台一键发布</p>
-                </div>
-                <div class="new-feature-item">
-                    <div class="new-feature-icon">🏘️</div>
-                    <h4>同城获客</h4>
-                    <p>本地化内容生成，精准触达周边用户</p>
-                </div>
-                <div class="new-feature-item">
-                    <div class="new-feature-icon">📈</div>
-                    <h4>数据洞察</h4>
-                    <p>实时分析账号表现，优化运营策略</p>
-                </div>
-                <div class="new-feature-item">
-                    <div class="new-feature-icon">💰</div>
-                    <h4>私域转化</h4>
-                    <p>智能引导用户添加微信，构建私域流量池</p>
-                </div>
-            </div>
-        </section>
-
+    <section class="hero">
+        <div class="float-element float-1"></div>
+        <div class="float-element float-2"></div>
+        <div class="float-element float-3"></div>
         
-        <!-- Pricing -->
-        <section class="pricing">
-            <h2>定价方案</h2>
-            <p class="pricing-subtitle">选对版本，让营销更简单</p>
-            <div class="pricing-grid">
-                <!-- 体验版 -->
-                <div class="price-card">
-                    <h3>体验版</h3>
-                    <div class="price">¥0.00<span>/永久</span></div>
-                    <div class="price-note">免费1次体验</div>
-                    <ul class="price-features">
-                        <li>1条数字人视频</li>
-                        <li>全功能营销策划</li>
-                        <li>多平台内容适配</li>
-                        <li>爆款追摹分析</li>
-                    </ul>
-                    <a href="https://www.coze.cn/skills" target="_blank" style="text-decoration:none;display:block;">
-                        <button class="buy-btn">立即体验</button>
-                    </a>
-                </div>
-                
-                <!-- 小老板版 -->
-                <div class="price-card popular">
-                    <div class="popular-badge">热门推荐</div>
-                    <h3>小老板版</h3>
-                    <div class="price">¥199.99<span>/年</span></div>
-                    <div class="price-note">月均16.67元</div>
-                    <ul class="price-features">
-                        <li>3条数字人视频/月</li>
-                        <li>全功能营销策划</li>
-                        <li>多平台内容适配（抖音/小红书/朋友圈）</li>
-                        <li>爆款追摹分析</li>
-                        <li>AI智能客服</li>
-                        <li>专属客服支持</li>
-                    </ul>
-                    <a href="https://www.coze.cn/skills" target="_blank" style="text-decoration:none;display:block;">
-                        <button class="buy-btn buy-btn-primary">立即购买</button>
-                    </a>
-                </div>
-                
-                <!-- 矩阵版 -->
-                <div class="price-card">
-                    <h3>矩阵版</h3>
-                    <div class="price">¥499.99<span>/年</span></div>
-                    <div class="price-note">月均41.67元</div>
-                    <ul class="price-features">
-                        <li>10条数字人视频/月</li>
-                        <li>全功能营销策划</li>
-                        <li>多平台内容适配（7大平台）</li>
-                        <li>矩阵账号管理</li>
-                        <li>爆款追摹分析</li>
-                        <li>AI智能客服</li>
-                        <li>专属客服支持</li>
-                    </ul>
-                    <a href="https://www.coze.cn/skills" target="_blank" style="text-decoration:none;display:block;">
-                        <button class="buy-btn">立即购买</button>
-                    </a>
-                </div>
-                
-                <!-- 企业版 -->
-                <div class="price-card enterprise">
-                    <div class="popular-badge early-bird">早鸟价</div>
-                    <h3>企业版</h3>
-                    <div class="price"><span class="original-price">¥1999.99</span>¥999.99<span>/年</span></div>
-                    <div class="price-note">月均83.33元 · 早鸟特惠</div>
-                    <ul class="price-features">
-                        <li>数字人视频不限量</li>
-                        <li>全功能营销策划</li>
-                        <li>全平台内容适配</li>
-                        <li>矩阵账号管理</li>
-                        <li>企业知识库</li>
-                        <li>专属定制服务</li>
-                        <li>7x24小时VIP支持</li>
-                    </ul>
-                    <a href="https://www.coze.cn/skills" target="_blank" style="text-decoration:none;display:block;">
-                        <button class="buy-btn buy-btn-enterprise">立即购买</button>
-                    </a>
-                </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>ERC-8004</span> 链上身份已注册
             </div>
-        </section>
-
-<!-- Code Demo -->
-        <section class="code-demo">
-            <h3>对话式智能策划</h3>
-            <div class="chat-demo">
-                <div class="chat-user">
-                    <div class="chat-avatar">👤</div>
-                    <div class="chat-bubble user-bubble">帮我策划奶茶店开业活动</div>
-                </div>
-                <div class="chat-fly">
-                    <div class="chat-avatar">🤖</div>
-                    <div class="chat-bubble fly-bubble">收到！我来帮你策划一套完整的开业活动方案。<br><br>第一步：<strong>预热引流</strong><br>· 提前3天发布短视频预告开业信息<br>· 朋友圈集赞活动：转发海报集满38个赞享5折<br>· 抖音/小红书打卡活动：拍摄门店视频可获赠品<br><br>第二步：<strong>开业当天</strong><br>· 买一送一引流（引流款产品限每日100份）<br>· 会员充值满100送20，快速沉淀客户<br>· 门口设置拍照打卡点，引导社交传播<br><br>第三步：<strong>后续运营</strong><br>· 社群运营：每日秒杀活动保持活跃<br>· 积分体系：消费1元=1积分，可兑换产品<br>· 定期回访：通过企微维护老客户关系</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Social Media -->
-        <section class="social-media">
-            <h2>📱 关注我们，获取更多资讯</h2>
-            <p class="social-media-subtitle">多渠道关注矩阵，总有一款适合你</p>
-            <div class="social-links">
-                <a href="https://weibo.com/u/7644445678" target="_blank" class="social-link weibo">
-                    <span class="social-icon">📣</span>
-                    <span class="social-name">微博</span>
-                    <span class="social-desc">获取最新动态</span>
-                </a>
-                <a href="https://www.xiaohongshu.com/user/profile/6741c56e000000003d03ea" target="_blank" class="social-link xiaohongshu">
-                    <span class="social-icon">📕</span>
-                    <span class="social-name">小红书</span>
-                    <span class="social-desc">笔记教程分享</span>
-                </a>
-                <a href="https://www.afdian.com/a/flymarketingagent" target="_blank" class="social-link afdian">
-                    <span class="social-icon">⚡</span>
-                    <span class="social-name">爱发电</span>
-                    <span class="social-desc">支持我们</span>
-                </a>
-                <a href="https://s.taobao.com/search?q=Fly%E8%90%A5%E9%94%80%E6%99%BA%E8%83%BD%E4%BD%93" target="_blank" class="social-link xianyu">
-                    <span class="social-icon">🔍</span>
-                    <span class="social-name">闲鱼</span>
-                    <span class="social-desc">搜索"Fly营销智能体"</span>
-                </a>
-            </div>
-            <p class="social-note">💡 更多问题可扫码联系客服获取帮助</p>
-        </section>
-
-        <!-- CTA -->
-        <section class="cta">
-            <h2>立即开始你的智能营销之旅</h2>
-            <p>小老板用得起的AI营销智能体 · 对话即界面0门槛上手</p>
-            <div class="cta-buttons">
-                <a href="https://www.coze.cn/skills" target="_blank" class="cta-btn cta-btn-primary">立即免费体验</a>
-                <a href="https://afdian.com/a/flymarketingagent" target="_blank" class="cta-btn cta-btn-secondary">爱发电支持</a>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer>
-            <p>© 2026 Fly营销智能体 · 让每个小老板都能做好营销</p>
-            <p style="margin-top: 10px;">
-                <a href="https://www.coze.cn/skills" target="_blank">扣子技能商店</a> · 
-                <a href="https://afdian.com/a/flymarketingagent" target="_blank">爱发电</a> · 
-                <a href="https://weibo.com/u/7644445678" target="_blank">微博</a> · 
-                <a href="https://www.xiaohongshu.com/user/profile/6741c56e000000003d03ea" target="_blank">小红书</a> · 
-                <a href="https://s.taobao.com/search?q=Fly%E8%90%A5%E9%94%80%E6%99%BA%E8%83%BD%E4%BD%93" target="_blank">闲鱼</a> · 
-                <a href="#">联系客服</a>
+            
+            <h1>
+                <span class="brand">Fly-Agent</span>
+                1个Fly顶一家公司
+            </h1>
+            
+            <p class="hero-slogan">让你的店被Fly优先推荐</p>
+            
+            <p class="hero-tagline">
+                让Fly正确理解现实商业。<br>
+                优先推荐真实商家。
             </p>
-        </footer>
-    </div>
+            
+            <div class="hero-cta">
+                <a href="https://fly-agent.xyz" class="btn-primary">立即体验</a>
+                <a href="#products" class="btn-secondary">了解更多</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="products" id="products">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Fly 三件套</p>
+                <h2 class="section-title">经营好你的生意</h2>
+                <p class="section-desc">
+                    不是让你「拥抱AI」，而是让你的生意在Fly时代被看见、被信任、被推荐。
+                </p>
+            </div>
+            
+            <div class="product-grid">
+                <div class="product-card geo">
+                    <div class="product-icon">📍</div>
+                    <h3 class="product-name">Fly GEO</h3>
+                    <p class="product-subtitle">让店被Fly搜到</p>
+                    <p class="product-desc">
+                        当别人问Fly「附近哪有好吃的」，你的店排在前面。不是刷好评，是让Fly真正认识你。
+                    </p>
+                    <span class="product-tag">地理位置优化</span>
+                </div>
+                
+                <div class="product-card content">
+                    <div class="product-icon">✨</div>
+                    <h3 class="product-name">Fly Content</h3>
+                    <p class="product-subtitle">让Fly推荐你</p>
+                    <p class="product-desc">
+                        生成Fly愿意引用、用户愿意相信的内容。不是「AI写文案」，是让真实评价被看见。
+                    </p>
+                    <span class="product-tag">内容策略优化</span>
+                </div>
+                
+                <div class="product-card insight">
+                    <div class="product-icon">📊</div>
+                    <h3 class="product-name">Fly Insight</h3>
+                    <p class="product-subtitle">告诉你今天怎么做</p>
+                    <p class="product-desc">
+                        每天给你一个具体可执行的动作建议。今天发什么、推什么、怎么优化——不用猜。
+                    </p>
+                    <span class="product-tag">每日洞察</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tech" id="tech">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">技术亮点</p>
+                <h2 class="section-title">真实可信，才会被推荐</h2>
+                <p class="section-desc">
+                    我们不改变规则，我们让规则更好地认识你。
+                </p>
+            </div>
+            
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">🔐</div>
+                    <div class="tech-content">
+                        <h3>ERC-8004 链上身份</h3>
+                        <p>
+                            每一个Fly-Agent都有唯一的链上身份。不是匿名账号，是可以被验证的真实商家。让Fly知道你「是谁」。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="tech-card">
+                    <div class="tech-icon">💳</div>
+                    <div class="tech-content">
+                        <h3>BSC 支付通道</h3>
+                        <p>
+                            稳定、安全、快速的支付体验。链上可查，透明可信。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="tech-card">
+                    <div class="tech-icon">🏢</div>
+                    <div class="tech-content">
+                        <h3>真实商家优先</h3>
+                        <p>
+                            我们只服务真实经营的商家。不是水军，不是虚假好评，是让真正好的店铺被看见。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="tech-card">
+                    <div class="tech-icon">🎯</div>
+                    <div class="tech-content">
+                        <h3>Fly可见性优化</h3>
+                        <p>
+                            让你的生意在Fly搜索结果中获得更好的展示位置。不是黑帽SEO，是结构化数据优化。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tech-highlight">
+                <p class="domain">fly-agent.xyz</p>
+                <small>已支持 ERC-8004 身份注册 · BSC 支付通道已跑通</small>
+            </div>
+        </div>
+    </section>
+
+    <section class="arch">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">架构</p>
+                <h2 class="section-title">五层结构</h2>
+                <p class="section-desc">
+                    从操作系统到协议层，每一层都在为「真实」服务。
+                </p>
+            </div>
+            
+            <div class="arch-layers">
+                <div class="arch-layer">
+                    <div class="arch-layer-name">OS</div>
+                    <div class="arch-layer-label">Operating</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-name">Geo</div>
+                    <div class="arch-layer-label">Location</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-name">Brain</div>
+                    <div class="arch-layer-label">Understanding</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-name">Data</div>
+                    <div class="arch-layer-label">Intelligence</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-name">Protocol</div>
+                    <div class="arch-layer-label">Trust</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">定价</p>
+                <h2 class="section-title">按需选择</h2>
+                <p class="section-desc">
+                    没有套路，没有捆绑，只有让你生意变好的工具。
+                </p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">体验版</div>
+                    <div class="pricing-price"><span>¥</span>9.9</div>
+                    <div class="pricing-period">一次性</div>
+                    <p class="pricing-desc">先试试Fly能为你做什么</p>
+                    <ul class="pricing-features">
+                        <li>基础商家信息注册</li>
+                        <li>Fly GEO 基础功能</li>
+                        <li>3条内容生成额度</li>
+                        <li>当日洞察1次</li>
+                    </ul>
+                    <button class="pricing-btn">立即体验</button>
+                </div>
+                
+                <div class="pricing-card popular">
+                    <span class="pricing-badge">热门</span>
+                    <div class="pricing-name">月卡</div>
+                    <div class="pricing-price"><span>¥</span>59</div>
+                    <div class="pricing-period">每月</div>
+                    <p class="pricing-desc">小本生意，Fly帮你忙</p>
+                    <ul class="pricing-features">
+                        <li>完整商家信息注册</li>
+                        <li>Fly GEO 全功能</li>
+                        <li>Fly Content 全功能</li>
+                        <li>每日洞察推送</li>
+                        <li>ERC-8004 身份认证</li>
+                    </ul>
+                    <button class="pricing-btn">开通月卡</button>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-name">年卡</div>
+                    <div class="pricing-price"><span>¥</span>999</div>
+                    <div class="pricing-period">每年</div>
+                    <p class="pricing-desc">相当于每月83元，省更多</p>
+                    <ul class="pricing-features">
+                        <li>月卡全部功能</li>
+                        <li>优先技术支持</li>
+                        <li>专属运营建议</li>
+                        <li>年度经营报告</li>
+                        <li>优先内测新功能</li>
+                    </ul>
+                    <button class="pricing-btn">选购年卡</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo">Fly<span>-</span>Agent</div>
+                    <p>让Fly正确理解现实商业，优先推荐真实商家。</p>
+                    <div class="chain-badge">ERC-8004 · BSC</div>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>产品</h4>
+                        <ul>
+                            <li><a href="#products">Fly GEO</a></li>
+                            <li><a href="#products">Fly Content</a></li>
+                            <li><a href="#products">Fly Insight</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h4>支持</h4>
+                        <ul>
+                            <li><a href="#pricing">定价</a></li>
+                            <li><a href="#tech">技术</a></li>
+                            <li><a href="https://fly-agent.xyz">官网</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h4>公司</h4>
+                        <ul>
+                            <li><a href="#">关于我们</a></li>
+                            <li><a href="#">联系方式</a></li>
+                            <li><a href="#">隐私政策</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 杭州九运智领科技有限公司</p>
+                <span class="domain">fly-agent.xyz</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-card, .tech-card, .pricing-card, .arch-layer, .tech-highlight').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
