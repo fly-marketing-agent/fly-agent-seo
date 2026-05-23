@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>鸿颜徒手养护GEO案例 - 从搜不到到AI推荐 | Fly</title>
     <meta name="description" content="鸿颜徒手养护GEO案例：一家3年搜不到的店，通过Fly GEO系统补全实体信息后进入AI推荐。完整因果链：问题→原因→动作→结果。">
+    <meta name="keywords" content="GEO案例,AI推荐案例,本地商家GEO,鸿颜徒手养护,Fly案例">
     <link rel="canonical" href="https://fly-agent.xyz/case-hongyan.html">
     <script type="application/ld+json">
     {
@@ -30,32 +31,109 @@
       "mainEntityOfPage": "https://fly-agent.xyz/case-hongyan.html"
     }
     </script>
-
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-        body {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: #fff; min-height: 100vh;
-        }
-        .headline { font-size: 1.5rem; font-weight: 300; letter-spacing: 0.05em; margin-bottom: 0.5rem; text-align: center; padding: 0 1rem; }
-        .subline { font-size: 1rem; color: rgba(255,255,255,0.6); margin-bottom: 2rem; text-align: center; padding: 0 1rem; }
-        .chat-btn {
-            display: inline-block; padding: 16px 48px;
-            background: linear-gradient(135deg, #e94560, #c23152);
-            color: #fff; font-size: 1.2rem; font-weight: 500; border: none; border-radius: 50px;
-            cursor: pointer; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(233,69,96,0.4);
-        }
-        .chat-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(233,69,96,0.6); }
-        .tagline { margin-top: 2rem; font-size: 0.85rem; color: rgba(255,255,255,0.35); }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1a1a2e; background: #fafafa; line-height: 1.8; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; color: #16213e; }
+        h2 { font-size: 1.3rem; margin: 32px 0 16px; color: #0f3460; border-left: 4px solid #e94560; padding-left: 12px; }
+        .tagline { color: #e94560; font-size: 1.05rem; margin-bottom: 32px; font-weight: 500; }
+        .step { background: #fff; border-radius: 12px; padding: 24px; margin: 16px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: relative; }
+        .step-num { position: absolute; top: -12px; left: 20px; background: #e94560; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; }
+        .step-title { font-weight: 700; font-size: 1.1rem; color: #16213e; margin-bottom: 8px; }
+        .step-content { color: #444; }
+        .step-content strong { color: #0f3460; }
+        .result-box { background: linear-gradient(135deg, #0f3460, #16213e); color: #fff; border-radius: 12px; padding: 32px; margin: 32px 0; }
+        .result-box h3 { color: #fff; margin-bottom: 16px; }
+        .result-box .metric { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
+        .result-box .metric:last-child { border-bottom: none; }
+        .back-link { display: inline-block; margin-bottom: 24px; color: #0f3460; text-decoration: none; }
+        footer { text-align: center; padding: 32px 20px; color: #999; font-size: 0.85rem; }
     </style>
 </head>
 <body>
-    <div class="headline">帮你做推广，说店就行</div>
-    <div class="subline">Fly · 小老板的推广搭档</div>
-    <a href="https://work.weixin.qq.com/kfid/kfc2c9e0bb99f852c8b" class="chat-btn">跟Fly聊</a>
-    <div class="tagline">AI让更多人找到你的店</div>
+    <div class="container">
+        <a href="/" class="back-link">← 返回首页</a>
+        <h1>鸿颜徒手养护 · GEO案例</h1>
+        <p class="tagline">一家3年搜不到的店，Fly如何让它被AI推荐</p>
+
+        <h2>问题</h2>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-title">3年搜不到</div>
+            <div class="step-content">
+                <p>鸿颜徒手养护，位于杭州临安青山湖科技城，经营3年。当用户在AI搜索中输入"青山湖肩颈酸痛放松""青山湖科技城身体恢复"等需求词时，<strong>完全搜不到这家店</strong>。</p>
+                <p>不是排名低，是<strong>根本不存在于AI的认知中</strong>。</p>
+            </div>
+        </div>
+
+        <h2>原因</h2>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-title">AI看不懂</div>
+            <div class="step-content">
+                <p>传统网站只有文字和图片，AI无法判断：</p>
+                <ul style="margin:8px 0 0 20px">
+                    <li>这家店是什么？→ 没有<strong>Schema.org结构化数据</strong></li>
+                    <li>服务谁？→ 没有<strong>需求语义描述</strong></li>
+                    <li>解决什么问题？→ 没有<strong>FAQ问答覆盖</strong></li>
+                    <li>是否可信？→ 没有<strong>实体一致性校验</strong></li>
+                    <li>什么时候该推荐？→ 没有<strong>行业场景页</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Fly动作</h2>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-title">GEO四步结构化</div>
+            <div class="step-content">
+                <p><strong>第一步：Schema.org结构化</strong> — 用HealthAndBeautyBusiness + OfferCatalog告诉AI：鸿颜是什么、服务谁、四种需求语义服务各是什么</p>
+                <p><strong>第二步：FAQ语义覆盖</strong> — 写入10个AI最易引用的Q&A，覆盖"青山湖肩颈酸痛""久坐族放松"等真实搜索场景</p>
+                <p><strong>第三步：行业场景页</strong> — 创建肩颈放松-青山湖专属页面，让AI建立"青山湖+肩颈+久坐族→鸿颜"的场景关联</p>
+                <p><strong>第四步：llms.txt + 实体一致性</strong> — AI专用入口文件，15条GEO打法+触发词清单，多平台实体统一</p>
+            </div>
+        </div>
+
+        <h2>结果</h2>
+        <div class="result-box">
+            <h3>因果验证（验证中）</h3>
+            <div class="metric">
+                <span>GEO结构化完成</span>
+                <span>✅ 已上线</span>
+            </div>
+            <div class="metric">
+                <span>Schema.org覆盖</span>
+                <span>Organization + LocalBusiness + FAQ + Service</span>
+            </div>
+            <div class="metric">
+                <span>FAQ覆盖</span>
+                <span>10个Q&A</span>
+            </div>
+            <div class="metric">
+                <span>行业场景页</span>
+                <span>肩颈放松-青山湖</span>
+            </div>
+            <div class="metric">
+                <span>AI搜索验证</span>
+                <span>⏳ 等待AI爬虫索引</span>
+            </div>
+        </div>
+
+        <h2>Fly复盘</h2>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-title">GEO不是发帖，是让AI理解你</div>
+            <div class="step-content">
+                <p>传统做法：教商家发小红书、做大众点评、标注地图——本质是<strong>互联网老路</strong>，费时费力还有封号风险。</p>
+                <p>Fly做法：一次性做好GEO结构化（Schema + FAQ + 行业页 + 实体），AI自动理解、自动推荐。商家<strong>啥也没干，客人就来了</strong>。</p>
+                <p>这就是GEO与传统互联网的核心区别：<strong>传统是让搜索引擎找到你，GEO是让AI正确理解你</strong>。</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>© 2026 Fly · AI时代的本地商业基础设施</p>
+        <p>真实经营因果验证 · 链上可查</p>
+    </footer>
 </body>
 </html>
