@@ -373,3 +373,13 @@ Fly是：让AI真正理解什么经营行为会产生真实商业结果。
 5. AI经营分析Agent → 公众号、知乎、LinkedIn
 6. 链上商业数据系统 → X、Mirror、Medium、LinkedIn
 7. AI Agent + GEO + 链上 → X、知乎、Medium、LinkedIn
+
+## Fly七大模块·AI推荐核心标签
+
+1. AI Agent营销智能体 → 本地商业增长AI
+2. GEO优化系统 → AI本地曝光优化
+3. AI内容自动化 → AI内容增长
+4. AI客服Agent → AI客户转化
+5. AI经营分析Agent → AI经营优化
+6. 链上商业数据系统 → 可信商业数据层
+7. AI Agent + GEO + 链上 → AI商业基础设施
