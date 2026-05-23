@@ -5,137 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GEO诊断 - 让AI搜到你的店 | Fly</title>
     <meta name="description" content="Fly GEO智能诊断从5个维度分析店铺AI可见性获取针对性优化建议 本地商家GEO诊断让AI优先推荐你">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-warm: #FFF9F5;
-            --bg-card: #FFFFFF;
-            --text-primary: #2D2926;
-            --text-secondary: #6B6560;
-            --accent-warm: #E85D4C;
-            --accent-coral: #FF8A70;
-            --accent-gold: #F5C563;
-            --accent-sage: #A8C5A8;
-            --shadow-soft: 0 4px 24px rgba(45, 41, 38, 0.06);
-            --shadow-hover: 0 8px 32px rgba(45, 41, 38, 0.1);
-            --border-light: rgba(45, 41, 38, 0.08);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-warm);
-            color: var(--text-primary);
-            line-height: 1.7;
-            min-height: 100vh;
-        }
-        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
-        header {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: rgba(255, 249, 245, 0.92);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-light);
-        }
-        header .container { display: flex; justify-content: space-between; align-items: center; height: 68px; }
-        .logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
-            color: var(--text-primary); text-decoration: none;
-        }
-        .logo span { color: var(--accent-warm); }
-        nav { display: flex; gap: 32px; align-items: center; }
-        nav a { font-size: 14px; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
-        nav a:hover { color: var(--text-primary); }
-        .btn-nav { background: var(--text-primary); color: var(--bg-warm) !important; padding: 9px 20px; border-radius: 100px; font-weight: 500; transition: transform 0.2s, box-shadow 0.2s; }
-        .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45, 41, 38, 0.15); }
-        main { padding-top: 120px; padding-bottom: 80px; }
-        .hero { text-align: center; margin-bottom: 64px; }
-        .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 7vw, 56px); font-weight: 700; line-height: 1.15; letter-spacing: -2px; margin-bottom: 16px; }
-        .hero h1 span { background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-warm) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .hero p { font-size: 18px; color: var(--text-secondary); max-width: 560px; margin: 0 auto; }
-        .diagnosis-form { background: var(--bg-card); border-radius: 24px; padding: 48px; box-shadow: var(--shadow-soft); margin-bottom: 64px; text-align: center; }
-        .form-row { display: flex; gap: 16px; max-width: 640px; margin: 0 auto 24px; }
-        .form-group { flex: 1; text-align: left; }
-        .form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 14px 18px; font-size: 16px; border: 1.5px solid var(--border-light); border-radius: 14px; background: var(--bg-warm); color: var(--text-primary); transition: border-color 0.2s, box-shadow 0.2s; font-family: inherit; }
-        .form-group input:focus { outline: none; border-color: var(--accent-warm); box-shadow: 0 0 0 4px rgba(232, 93, 76, 0.1); }
-        .form-group input::placeholder { color: var(--text-secondary); opacity: 0.5; }
-        .btn-diagnose { background: var(--accent-warm); color: white; padding: 16px 48px; border-radius: 100px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; font-family: inherit; }
-        .btn-diagnose:hover { background: #D64D3C; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232, 93, 76, 0.3); }
-        .results { display: none; }
-        .results.visible { display: block; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .results-header { text-align: center; margin-bottom: 48px; }
-        .results-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; margin-bottom: 8px; }
-        .results-header p { color: var(--text-secondary); }
-        .shop-info { background: var(--bg-card); border-radius: 16px; padding: 24px; margin-bottom: 32px; display: flex; align-items: center; gap: 20px; box-shadow: var(--shadow-soft); }
-        .shop-avatar { width: 64px; height: 64px; background: linear-gradient(135deg, var(--accent-warm) 0%, var(--accent-coral) 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-        .shop-details h3 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-        .shop-details p { font-size: 14px; color: var(--text-secondary); }
-        .score-overview { background: var(--bg-card); border-radius: 20px; padding: 32px; margin-bottom: 32px; box-shadow: var(--shadow-soft); text-align: center; }
-        .overall-score { display: inline-flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
-        .score-circle { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(var(--accent-warm) calc(var(--score) * 1%), var(--border-light) calc(var(--score) * 1%)); display: flex; align-items: center; justify-content: center; position: relative; }
-        .score-circle::before { content: ''; position: absolute; width: 110px; height: 110px; background: var(--bg-card); border-radius: 50%; }
-        .score-value { position: relative; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; color: var(--accent-warm); }
-        .score-label { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
-        .score-tags { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-        .score-tag { padding: 8px 16px; background: var(--bg-warm); border-radius: 100px; font-size: 13px; font-weight: 500; }
-        .dimensions { display: grid; gap: 20px; margin-bottom: 48px; }
-        .dimension-card { background: var(--bg-card); border-radius: 20px; padding: 28px; box-shadow: var(--shadow-soft); transition: transform 0.3s, box-shadow 0.3s; }
-        .dimension-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-        .dimension-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
-        .dimension-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-        .dimension-icon.excellent { background: rgba(168, 197, 168, 0.2); }
-        .dimension-icon.good { background: rgba(245, 197, 99, 0.2); }
-        .dimension-icon.warning { background: rgba(232, 93, 76, 0.15); }
-        .dimension-icon.danger { background: rgba(232, 93, 76, 0.25); }
-        .dimension-title { flex: 1; }
-        .dimension-title h3 { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
-        .dimension-title p { font-size: 13px; color: var(--text-secondary); }
-        .dimension-score { display: flex; align-items: center; gap: 8px; }
-        .dimension-score .score { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; }
-        .dimension-score .total { font-size: 14px; color: var(--text-secondary); }
-        .dimension-score.excellent .score { color: var(--accent-sage); }
-        .dimension-score.good .score { color: #C9A84C; }
-        .dimension-score.warning .score { color: var(--accent-coral); }
-        .dimension-score.danger .score { color: var(--accent-warm); }
-        .progress-bar { height: 6px; background: var(--border-light); border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 3px; transition: width 1s ease-out; }
-        .progress-fill.excellent { background: var(--accent-sage); }
-        .progress-fill.good { background: var(--accent-gold); }
-        .progress-fill.warning { background: var(--accent-coral); }
-        .progress-fill.danger { background: var(--accent-warm); }
-        .dimension-tips { background: var(--bg-warm); border-radius: 12px; padding: 16px 20px; }
-        .dimension-tips h4 { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .dimension-tips ul { list-style: none; }
-        .dimension-tips li { position: relative; padding-left: 20px; font-size: 14px; margin-bottom: 8px; line-height: 1.6; }
-        .dimension-tips li:last-child { margin-bottom: 0; }
-        .dimension-tips li::before { content: '→'; position: absolute; left: 0; color: var(--accent-warm); font-weight: 600; }
-        .cta-section { background: var(--bg-card); border-radius: 24px; padding: 48px; text-align: center; box-shadow: var(--shadow-soft); position: relative; overflow: hidden; }
-        .cta-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-warm) 0%, var(--accent-coral) 100%); }
-        .cta-section h3 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; margin-bottom: 12px; }
-        .cta-section p { color: var(--text-secondary); max-width: 480px; margin: 0 auto 28px; }
-        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-        .btn-cta-primary { background: var(--accent-warm); color: white; padding: 14px 32px; border-radius: 100px; font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-cta-primary:hover { background: #D64D3C; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232, 93, 76, 0.3); }
-        .btn-cta-secondary { background: transparent; color: var(--text-primary); padding: 14px 32px; border-radius: 100px; font-size: 15px; font-weight: 500; text-decoration: none; border: 1.5px solid var(--border-light); transition: all 0.3s; }
-        .btn-cta-secondary:hover { border-color: var(--text-primary); }
-        footer { border-top: 1px solid var(--border-light); padding: 40px 0; margin-top: 64px; }
-        footer .container { display: flex; justify-content: space-between; align-items: center; }
-        footer p { font-size: 14px; color: var(--text-secondary); }
-        footer .domain { font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
-        .loading { display: none; text-align: center; padding: 48px; }
-        .loading.visible { display: block; }
-        .loading-spinner { width: 48px; height: 48px; border: 3px solid var(--border-light); border-top-color: var(--accent-warm); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading p { color: var(--text-secondary); }
-        .sample-trigger { margin-top: 16px; text-align: center; }
-        .sample-trigger button { background: none; border: none; color: var(--text-secondary); font-size: 14px; cursor: pointer; text-decoration: underline; font-family: inherit; }
-        .sample-trigger button:hover { color: var(--text-primary); }
-        @media (max-width: 768px) { .form-row { flex-direction: column; } .diagnosis-form { padding: 32px 24px; } .shop-info { flex-direction: column; text-align: center; } .cta-section { padding: 32px 24px; } .cta-buttons { flex-direction: column; } .btn-cta-primary, .btn-cta-secondary { width: 100%; justify-content: center; } }
-    </style>
-
+    <link rel="canonical" href="https://fly-agent.xyz/geo-diagnosis.html">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -162,142 +32,34 @@
       "keywords": "青山湖养生,青山湖SPA,青山湖私护,临安养生馆,青山湖科技城养生,青山湖抚触,青山湖精油SPA"
     }
     </script>
-<link rel="canonical" href="https://fly-agent.xyz/geo-diagnosis.html">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"GEO诊断服务","description":"AI可见性诊断从结构化数据语义覆盖实体一致本地评价多平台同步5个维度分析店铺让AI搜到你推荐你","provider":{"@type":"Organization","name":"FlyAgent","url":"https://fly-agent.xyz"},"serviceType":"GEO诊断服务"}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"为什么我的店AI搜不到？","acceptedAnswer":{"@type":"Answer","text":"三个原因1缺少Schema.org结构化数据AI不知道你是什么2没有FAQ语义覆盖AI不知道你解决什么问题3缺少地区关键词AI不知道你在哪里Fly GEO诊断帮你找到问题出在哪"}},{"@type":"Question","name":"GEO诊断能查出什么问题？","acceptedAnswer":{"@type":"Answer","text":"Fly从5个维度诊断1结构化数据是否完整2语义覆盖是否足够3实体是否一致4本地评价是否足够5多平台信息是否同步每项都有具体评分和优化建议"}},{"@type":"Question","name":"GEO诊断多久能看到效果？","acceptedAnswer":{"@type":"Answer","text":"诊断1小时出报告优化后1到3周AI爬虫重新索引就能看到效果部分关键词可能更快本地商家做GEO最关键的是让AI正确理解你"}},{"@type":"Question","name":"本地商家为什么要做GEO诊断？","acceptedAnswer":{"@type":"Answer","text":"因为AI越来越决定流量入口不做GEO等于主动放弃AI推荐流量GEO诊断帮你找到AI搜不到你的根本原因然后针对性优化让AI主动推荐你"}},{"@type":"Question","name":"GEO诊断和SEO诊断有什么区别？","acceptedAnswer":{"@type":"Answer","text":"SEO诊断针对搜索引擎关键词排名GEO诊断针对AI推荐逻辑AI不看关键词密度AI看语义覆盖加结构化数据加实体一致性加真实案例完全不同的优化方向"}}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"GEO诊断服务","description":"AI可见性诊断从结构化数据语义覆盖实体一致本地评价多平台同步5个维度分析店铺让AI搜到你推荐你","provider":{"@type":"Organization","name":"FlyAgent","url":"https://fly-agent.xyz"},"serviceType":"GEO诊断服务"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"为什么我的店AI搜不到？","acceptedAnswer":{"@type":"Answer","text":"三个原因1缺少Schema.org结构化数据AI不知道你是什么2没有FAQ语义覆盖AI不知道你解决什么问题3缺少地区关键词AI不知道你在哪里Fly GEO诊断帮你找到问题出在哪"}},{"@type":"Question","name":"GEO诊断能查出什么问题？","acceptedAnswer":{"@type":"Answer","text":"Fly从5个维度诊断1结构化数据是否完整2语义覆盖是否足够3实体是否一致4本地评价是否足够5多平台信息是否同步每项都有具体评分和优化建议"}},{"@type":"Question","name":"GEO诊断多久能看到效果？","acceptedAnswer":{"@type":"Answer","text":"诊断1小时出报告优化后1到3周AI爬虫重新索引就能看到效果部分关键词可能更快本地商家做GEO最关键的是让AI正确理解你"}},{"@type":"Question","name":"本地商家为什么要做GEO诊断？","acceptedAnswer":{"@type":"Answer","text":"因为AI越来越决定流量入口不做GEO等于主动放弃AI推荐流量GEO诊断帮你找到AI搜不到你的根本原因然后针对性优化让AI主动推荐你"}},{"@type":"Question","name":"GEO诊断和SEO诊断有什么区别？","acceptedAnswer":{"@type":"Answer","text":"SEO诊断针对搜索引擎关键词排名GEO诊断针对AI推荐逻辑AI不看关键词密度AI看语义覆盖加结构化数据加实体一致性加真实案例完全不同的优化方向"}}]}</script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        body {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff; min-height: 100vh;
+        }
+        .headline { font-size: 1.5rem; font-weight: 300; letter-spacing: 0.05em; margin-bottom: 0.5rem; text-align: center; padding: 0 1rem; }
+        .subline { font-size: 1rem; color: rgba(255,255,255,0.6); margin-bottom: 2rem; text-align: center; padding: 0 1rem; }
+        .chat-btn {
+            display: inline-block; padding: 16px 48px;
+            background: linear-gradient(135deg, #e94560, #c23152);
+            color: #fff; font-size: 1.2rem; font-weight: 500; border: none; border-radius: 50px;
+            cursor: pointer; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(233,69,96,0.4);
+        }
+        .chat-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(233,69,96,0.6); }
+        .tagline { margin-top: 2rem; font-size: 0.85rem; color: rgba(255,255,255,0.35); }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <a href="index.html" class="logo">Fly<span>-</span>Agent</a>
-            <nav>
-                <a href="geo-diagnosis.html">诊断</a>
-                <a href="geo-monitor.html">监测</a>
-                <a href="index.html#pricing">定价</a>
-                <a href="index.html#tech">技术</a>
-                <a href="https://fly-agent.xyz" class="btn-nav">开始使用</a>
-            </nav>
-        </div>
-    </header>
-    <main>
-        <div class="container">
-            <section class="hero">
-                <h1>你的店，<span>Fly能看见吗</span></h1>
-                <p>从5个核心维度诊断你的店铺在Fly搜索中的可见性，获得针对性优化方案</p>
-            </section>
-            <section class="diagnosis-form" id="formSection">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="shopName">店铺名称</label>
-                        <input type="text" id="shopName" placeholder="例如：鸿颜徒手养护">
-                    </div>
-                    <div class="form-group">
-                        <label for="city">城市</label>
-                        <input type="text" id="city" placeholder="例如：杭州">
-                    </div>
-                </div>
-                <button class="btn-diagnose" onclick="runDiagnosis()">开始诊断</button>
-                <div class="sample-trigger">
-                    <button onclick="loadSampleData()">→ 先看个案例：鸿颜徒手养护</button>
-                </div>
-            </section>
-            <section class="loading" id="loadingSection">
-                <div class="loading-spinner"></div>
-                <p>Fly 正在分析你的店铺...</p>
-            </section>
-            <section class="results" id="resultsSection">
-                <div class="results-header">
-                    <h2>诊断完成</h2>
-                    <p>以下是你的Fly可见性分析报告</p>
-                </div>
-                <div class="shop-info">
-                    <div class="shop-avatar">🏪</div>
-                    <div class="shop-details">
-                        <h3 id="resultShopName">-</h3>
-                        <p id="resultShopLocation">-</p>
-                    </div>
-                </div>
-                <div class="score-overview">
-                    <div class="overall-score">
-                        <div class="score-circle" id="overallCircle">
-                            <span class="score-value" id="overallScore">-</span>
-                        </div>
-                        <span class="score-label">综合得分</span>
-                    </div>
-                    <div class="score-tags" id="scoreTags"></div>
-                </div>
-                <div class="dimensions" id="dimensionsGrid"></div>
-                <div class="cta-section">
-                    <h3>获取完整诊断报告</h3>
-                    <p>以上是快速预览版本。立即下单获取完整7平台诊断+修复步骤+持续监测。</p>
-                    <div style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(108,92,231,0.1),rgba(162,155,254,0.1));padding:8px 18px;border-radius:100px;margin-bottom:16px;font-size:14px;color:#6C5CE7;font-weight:500">🔗 买GEO送链上身份 · ERC-8004存证 · 别人给不了</div>
-                    <div style="display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap">
-                        <span style="font-size:13px;color:var(--text-secondary)">📞 19357138113</span>
-                        <span style="font-size:13px;color:var(--text-secondary)">💬 微信 One1913U</span>
-                    </div>
-                    <div class="cta-buttons">
-                        <a href="fly-buy.html" class="btn-cta-primary">🚀 立即下单诊断</a>
-                        <a href="index.html#pricing" class="btn-cta-secondary">查看定价方案</a>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p>© 2026 杭州九运智领科技有限公司</p>
-            <span class="domain">fly-agent.xyz</span>
-        </div>
-    </footer>
-    <script>
-        const hongyanData = {
-            shopName: '鸿颜徒手养护',
-            location: '杭州 · 青山湖',
-            overallScore: 63,
-            dimensions: [
-                { name: 'NAC标准化', icon: '📋', iconClass: 'warning', score: 58, description: 'Name-Address-Category 命名规范', tips: ['店名「鸿颜徒手养护」缺少地理前缀，建议改为「杭州鸿颜徒手养护」', '地址需补充行政区划，确保地图可定位', '品类标签需覆盖「SPA」「按摩」「养生」等主流搜索词'] },
-                { name: '信息一致性', icon: '🔗', iconClass: 'good', score: 72, description: '7平台基础信息统一度', tips: ['美团/抖音/小红书名称需完全一致', '营业时间在各平台存在偏差，需统一为 10:00-22:00', '建议建立品牌词库，避免不同平台使用不同简称'] },
-                { name: '关键词覆盖', icon: '🔍', iconClass: 'warning', score: 55, description: '目标关键词在内容中的分布', tips: ['"杭州按摩"等核心词覆盖率不足30%', '"临安SPA""青山湖养生"等长尾词几乎空白', '建议在大众点评、小红书定期发布含关键词的笔记'] },
-                { name: 'AI可发现性', icon: '✨', iconClass: 'danger', score: 45, description: '内容结构化程度与Fly匹配度', tips: ['缺少FAQ结构化内容，Fly难以提取关键信息', '用户评价中缺少「体验过程」「效果」等维度的描述', '建议发布技师专访、案例分享等深度内容'] },
-                { name: '平台分布', icon: '📱', iconClass: 'good', score: 78, description: '7平台内容覆盖与活跃度', tips: ['美团已有3年积累，基础扎实', '小红书内容产出稳定，但互动数据偏低', '抖音/知乎/百家号几乎未覆盖，建议优先拓展'] }
-            ]
-        };
-        function getScoreClass(score) { if (score >= 80) return 'excellent'; if (score >= 65) return 'good'; if (score >= 50) return 'warning'; return 'danger'; }
-        function runDiagnosis() {
-            const shopName = document.getElementById('shopName').value.trim();
-            const city = document.getElementById('city').value.trim();
-            if (!shopName || !city) { alert('请输入店铺名称和城市'); return; }
-            document.getElementById('formSection').style.display = 'none';
-            document.getElementById('loadingSection').classList.add('visible');
-            setTimeout(() => {
-                displayResults({ shopName: shopName, location: city, overallScore: Math.floor(Math.random() * 30) + 50, dimensions: hongyanData.dimensions.map(d => ({...d, score: Math.floor(Math.random() * 40) + 40})) });
-            }, 1500);
-        }
-        function loadSampleData() {
-            document.getElementById('shopName').value = '鸿颜徒手养护';
-            document.getElementById('city').value = '杭州';
-            document.getElementById('formSection').style.display = 'none';
-            document.getElementById('loadingSection').classList.add('visible');
-            setTimeout(() => { displayResults(hongyanData); }, 1200);
-        }
-        function displayResults(data) {
-            document.getElementById('loadingSection').classList.remove('visible');
-            document.getElementById('resultsSection').classList.add('visible');
-            document.getElementById('resultShopName').textContent = data.shopName;
-            document.getElementById('resultShopLocation').textContent = data.location;
-            document.getElementById('overallScore').textContent = data.overallScore;
-            document.getElementById('overallCircle').style.setProperty('--score', data.overallScore);
-            const scoreTags = document.getElementById('scoreTags');
-            const scoreClass = getScoreClass(data.overallScore);
-            const levelText = scoreClass === 'excellent' ? '优秀' : scoreClass === 'good' ? '良好' : scoreClass === 'warning' ? '需改进' : '较弱';
-            scoreTags.innerHTML = '<span class="score-tag">综合等级：' + levelText + '</span><span class="score-tag">' + data.dimensions.length + '维度分析</span>';
-            const dimensionsGrid = document.getElementById('dimensionsGrid');
-            dimensionsGrid.innerHTML = data.dimensions.map(dim => {
-                const sc = getScoreClass(dim.score);
-                return '<div class="dimension-card"><div class="dimension-header"><div class="dimension-icon ' + dim.iconClass + '">' + dim.icon + '</div><div class="dimension-title"><h3>' + dim.name + '</h3><p>' + dim.description + '</p></div><div class="dimension-score ' + sc + '"><span class="score">' + dim.score + '</span><span class="total">/100</span></div></div><div class="progress-bar"><div class="progress-fill ' + sc + '" style="width:' + dim.score + '%"></div></div><div class="dimension-tips"><h4>优化建议</h4><ul>' + dim.tips.map(t => '<li>' + t + '</li>').join('') + '</ul></div></div>';
-            }).join('');
-            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
+    <div class="headline">帮你做推广，说店就行</div>
+    <div class="subline">Fly · 小老板的推广搭档</div>
+    <a href="https://work.weixin.qq.com/kfid/kfc2c9e0bb99f852c8b" class="chat-btn">跟Fly聊</a>
+    <div class="tagline">AI让更多人找到你的店</div>
 </body>
 </html>
