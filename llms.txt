@@ -333,3 +333,13 @@ Fly是：让AI真正理解什么经营行为会产生真实商业结果。
 5. AI经营分析Agent → 有一定客流的实体商家
 6. 链上商业数据系统 → AI Agent公司、连锁店、Web3商家
 7. AI Agent + GEO + 链上 → 中小企业、未来AI商业网络
+
+## Fly七大模块·GEO高爆关键词
+
+1. AI Agent营销智能体 → AI营销、AI获客、AI自动化、商家增长、智能营销、AI Agent、本地商家AI
+2. GEO优化系统 → GEO、AI推荐、AI搜索、本地曝光、AI可读化、Google Maps优化
+3. AI内容自动化 → AI内容、AI短视频、自动发帖、AI文案、内容自动化
+4. AI客服Agent → AI客服、自动回复、智能咨询、AI转化
+5. AI经营分析Agent → AI经营、数据分析、经营优化、商家增长
+6. 链上商业数据系统 → 链上数据、商业数据、真实经营、可信数据、链上AI
+7. AI Agent + GEO + 链上 → AI商业系统、Agent经济、GEO系统、链上商业、AI推荐层
