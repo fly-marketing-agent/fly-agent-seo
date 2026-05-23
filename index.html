@@ -1134,60 +1134,34 @@
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: #fff;
-            min-height: 100vh;
-        }
-        .headline {
-            font-size: 1.5rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-            text-align: center;
-            padding: 0 1rem;
-        }
-        .subline {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.6);
-            margin-bottom: 2rem;
-            text-align: center;
-            padding: 0 1rem;
-        }
-        .chat-btn {
-            display: inline-block;
-            padding: 16px 48px;
-            background: linear-gradient(135deg, #e94560, #c23152);
-            color: #fff;
-            font-size: 1.2rem;
-            font-weight: 500;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(233,69,96,0.4);
-        }
-        .chat-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(233,69,96,0.6);
-        }
-        .tagline {
-            margin-top: 2rem;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.35);
-        }
+        html, body { height: 100%; overflow: hidden; }
+        #chat-container { width: 100%; height: 100vh; }
     </style>
 </head>
 <body>
-    <div class="headline">帮你做推广，说店就行</div>
-    <div class="subline">Fly · 小老板的推广搭档</div>
-    <a href="https://work.weixin.qq.com/kfid/kfc2c9e0bb99f852c8b" class="chat-btn">跟Fly聊</a>
-    <div class="tagline">AI让更多人找到你的店</div>
+    <div id="chat-container"></div>
+    <script src="https://sf-cdn.coze.cn/obj/unpkg-external/_coze-chat/latest/index.min.js"></script>
+    <script>
+        new CozeWebSDK.WebChatClient({
+            config: {
+                bot_id: '7634446147243311138',
+            },
+            ui: {
+                base: {
+                    lang: 'zh-CN',
+                },
+                asstBtn: {
+                    isNeed: false,
+                },
+                chatBot: {
+                    el: document.getElementById('chat-container'),
+                    title: 'Fly · 帮你做推广，说店就行',
+                },
+                footer: {
+                    isShow: false,
+                },
+            },
+        });
+    </script>
 </body>
 </html>
