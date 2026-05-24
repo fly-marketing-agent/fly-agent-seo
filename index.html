@@ -121,7 +121,7 @@ const PAT='sat_TZOQ6PbNVji5YHZoqzr8bFzCWN5I8k7wEDyan9kfaVBfrBladvimJksZynzIZNaq'
 let activeConv='c0',convs={};
 const C=document.getElementById('chatMsgs');
 const convDefs=[
-{id:'c0',icon:'💬',title:'开始对话',sub:'告诉我你的店',ic:'ic-g',badge:'在线',bc:'bg',sec:'对话',init:[{r:'bot',h:'<p>你好，我是你的专属营销AI员工 👋</p><p>告诉我你的<strong>店</strong>，我帮你诊断推广盲区 —— 哪笔钱浪费了、哪个渠道真有效、怎么自动优化。</p><div class="chips"><span class="chip" onclick="sendQuick(\'我是成都开火锅店的\')">🌶️ 成都火锅店</span><span class="chip" onclick="sendQuick(\'我是杭州开奶茶店的\')">🧋 杭州奶茶店</span><span class="chip" onclick="sendQuick(\'我是北京开美业的\')">💇 北京美业</span><span class="chip" onclick="sendQuick(\'帮我诊断推广盲区\')">🔍 诊断盲区</span></div>'}]},
+{id:'c0',icon:'💬',title:'开始对话',sub:'告诉我你的店',ic:'ic-g',badge:'在线',bc:'bg',sec:'对话',init:[]}},
 {id:'c1',icon:'🕳️',title:'推广黑洞诊断',sub:'算算你浪费了多少',ic:'ic-o',badge:'诊断',bc:'bo',sec:'工具',init:[{r:'bot',h:'<p>🕳️ <strong>推广黑洞诊断</strong></p><p>你不是不会推广，<strong>你是不知道哪里有效</strong>。平均每100块推广费，只有32块真正带来客户。</p><p>告诉我你每月推广费多少：</p><div class="chips"><span class="chip" onclick="sendQuick(\'我每月推广费3000\')">3000元/月</span><span class="chip" onclick="sendQuick(\'我每月推广费5000\')">5000元/月</span><span class="chip" onclick="sendQuick(\'我每月推广费1万\')">1万/月</span><span class="chip" onclick="sendQuick(\'我每月推广费3万以上\')">3万+/月</span></div>'}]},
 {id:'c2',icon:'📋',title:'AI执行记录',sub:'实时执行日志',ic:'ic-r',badge:'LIVE',bc:'br',sec:'工具',init:[{r:'bot',h:'<p>📋 <strong>AI执行记录</strong></p><p>Fly每天替你做这些事：</p><p>✅ 监控各渠道花费和效果<br>✅ 超预算自动止损<br>✅ 老客户7天未到店自动召回<br>✅ 竞品降价立即提醒</p><p>想知道今天执行了什么？输入"今天的执行日志"</p>'}]},
 {id:'c3',icon:'🤖',title:'Agent员工档案',sub:'入职37天 · 在岗',ic:'ic-c',sec:'档案',init:[{r:'bot',h:'<p>🤖 <strong>Agent员工档案</strong></p><p>你的AI员工已入职 <strong>37天</strong>，累计做出 <strong>89次</strong>经营决策，帮你止损 <strong>¥2,860</strong>，增收 <strong>¥8,320</strong>。</p><p>它知道：✅ 哪个时间客流最高 ✅ 哪种套餐利润最高 ✅ 哪类客户最容易复购 ✅ 哪个平台最容易浪费预算</p>'}]},
@@ -137,8 +137,8 @@ function renderSidebar(){const s=document.getElementById('convScroll');let h='',
 
 function switchConv(id){activeConv=id;renderSidebar();
 if(id==='c0'||id.startsWith('n')){
-C.innerHTML='';convs[id].msgs.forEach(m=>renderMsg(m.r,m.h));
-if(id.startsWith('n')&&convs[id].msgs.length===0)showWelcome();
+C.innerHTML='';
+if(convs[id].msgs.length===0){showWelcome()}else{convs[id].msgs.forEach(m=>renderMsg(m.r,m.h))}
 document.getElementById('chatTitle').textContent=convDefs.find(d=>d.id===id).title;
 closePanel();
 }else{
