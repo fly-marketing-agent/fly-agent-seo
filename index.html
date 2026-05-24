@@ -126,6 +126,24 @@ footer .links a{font-size:13px;color:var(--text2)}
 /* Wallet modal */
 .wallet-status{position:fixed;bottom:20px;right:20px;z-index:200;font-family:var(--mono);font-size:12px;padding:10px 16px;border-radius:8px;background:var(--bg3);border:1px solid rgba(0,255,204,.2);color:var(--cyan);display:none}
 .wallet-status.error{border-color:rgba(255,60,60,.3);color:#ff6b6b}
+
+
+/* Wallet Modal */
+.wallet-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center}
+.wallet-overlay.show{display:flex}
+.wallet-modal{background:var(--bg2);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px;width:380px;max-width:90vw}
+.wallet-modal h3{font-size:18px;margin-bottom:4px}
+.wallet-modal .desc{font-size:13px;color:var(--text3);margin-bottom:20px}
+.wallet-list{display:flex;flex-direction:column;gap:10px}
+.wallet-item{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);border:1px solid rgba(255,255,255,.06);border-radius:10px;cursor:pointer;transition:all .15s;font-size:14px;font-weight:500}
+.wallet-item:hover{border-color:var(--cyan);background:rgba(0,255,204,.04)}
+.wallet-item .icon{font-size:24px;width:36px;text-align:center}
+.wallet-item .name{flex:1}
+.wallet-item .tag{font-size:10px;color:var(--gold);background:rgba(240,185,11,.1);padding:2px 8px;border-radius:4px}
+.wallet-item.disabled{opacity:.35;cursor:not-allowed}
+.wallet-item.disabled:hover{border-color:rgba(255,255,255,.06);background:var(--bg)}
+.wallet-close{display:block;margin-top:16px;text-align:center;color:var(--text3);font-size:13px;cursor:pointer}
+.wallet-close:hover{color:var(--text)}
 </style>
 </head>
 <body>
@@ -342,42 +360,100 @@ footer .links a{font-size:13px;color:var(--text2)}
 <!-- Wallet Status -->
 <div class="wallet-status" id="walletStatus"></div>
 
+<!-- Wallet Modal -->
+<div class="wallet-overlay" id="walletOverlay" onclick="if(event.target===this)closeWalletModal()">
+  <div class="wallet-modal">
+    <h3>⛓️ 连接钱包</h3>
+    <p class="desc">选择钱包连接到 BNB Chain</p>
+    <div class="wallet-list">
+      <div class="wallet-item" id="w-binance" onclick="connectWith('binance')">
+        <span class="icon">🟡</span>
+        <span class="name">Binance Wallet</span>
+        <span class="tag">交易所</span>
+      </div>
+      <div class="wallet-item" id="w-okx" onclick="connectWith('okx')">
+        <span class="icon">⭕</span>
+        <span class="name">OKX Wallet</span>
+        <span class="tag">交易所</span>
+      </div>
+      <div class="wallet-item" id="w-bitget" onclick="connectWith('bitget')">
+        <span class="icon">🔷</span>
+        <span class="name">Bitget Wallet</span>
+        <span class="tag">交易所</span>
+      </div>
+      <div class="wallet-item" id="w-tp" onclick="connectWith('tokenpocket')">
+        <span class="icon">🔵</span>
+        <span class="name">TokenPocket</span>
+      </div>
+      <div class="wallet-item" id="w-metamask" onclick="connectWith('metamask')">
+        <span class="icon">🦊</span>
+        <span class="name">MetaMask</span>
+      </div>
+    </div>
+    <span class="wallet-close" onclick="closeWalletModal()">取消</span>
+  </div>
+</div>
+
 <script>
-function getProvider(){
-  return window.tokenpocket?.ethereum||window.ethereum||window.web3?.currentProvider||null;
-}
-async function connectWallet(){
-  const s=document.getElementById('walletStatus');
-  const b=document.getElementById('walletBtn');
-  let prov=getProvider();
-  if(!prov){
-    s.textContent='❌ 未检测到钱包，请安装MetaMask或TokenPocket';
-    s.className='wallet-status error';
-    s.style.display='block';
-    setTimeout(()=>s.style.display='none',4000);
-    return;
-  }
-  b.textContent='⏳ 连接中...';
-  try{
-    const accounts=await prov.request({method:'eth_requestAccounts'});
-    if(!accounts||!accounts.length)throw new Error('No accounts');
-    let chainId=await prov.request({method:'eth_chainId'});
-    if(chainId!=='0x38'){
-      try{await prov.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]})}
-      catch(e){await prov.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:['https://bsc.publicnode.com'],blockExplorerUrls:['https://bscscan.com']}]})}
+const WALLET_PROVIDERS = {
+  binance: { get: () => window.BinanceChain, name: 'Binance Wallet' },
+  okx: { get: () => window.okxwallet, name: 'OKX Wallet' },
+  bitget: { get: () => window.bitkeep?.ethereum, name: 'Bitget Wallet' },
+  tokenpocket: { get: () => window.tokenpocket?.ethereum, name: 'TokenPocket' },
+  metamask: { get: () => window.ethereum, name: 'MetaMask' }
+};
+
+function connectWallet() {
+  // 检测可用钱包，标记已安装/未安装
+  for (const [key, prov] of Object.entries(WALLET_PROVIDERS)) {
+    const el = document.getElementById('w-' + key);
+    const p = prov.get();
+    if (el) {
+      el.classList.toggle('disabled', !p);
     }
-    const addr=accounts[0];
-    b.textContent='✅ '+addr.slice(0,6)+'...'+addr.slice(38);
-    s.textContent='✅ 已连接: '+addr.slice(0,10)+'...'+addr.slice(-6)+' · BNB Chain';
-    s.className='wallet-status';
-    s.style.display='block';
-  }catch(e){
-    b.textContent='⛓️ 连接钱包';
-    s.textContent='❌ 连接失败: '+(e.message||'用户取消');
-    s.className='wallet-status error';
-    s.style.display='block';
   }
-  setTimeout(()=>s.style.display='none',5000);
+  document.getElementById('walletOverlay').classList.add('show');
+}
+
+function closeWalletModal() {
+  document.getElementById('walletOverlay').classList.remove('show');
+}
+
+async function connectWith(walletKey) {
+  const prov = WALLET_PROVIDERS[walletKey];
+  const p = prov?.get();
+  if (!p) return;
+  closeWalletModal();
+  
+  const s = document.getElementById('walletStatus');
+  const b = document.getElementById('walletBtn');
+  b.textContent = '⏳ 连接中...';
+  
+  try {
+    const accounts = await p.request({ method: 'eth_requestAccounts' });
+    if (!accounts || !accounts.length) throw new Error('No accounts');
+    
+    // 切换到BSC
+    let chainId = await p.request({ method: 'eth_chainId' });
+    if (chainId !== '0x38') {
+      try { await p.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] }); }
+      catch (e) {
+        await p.request({ method: 'wallet_addEthereumChain', params: [{ chainId: '0x38', chainName: 'BNB Smart Chain', nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 }, rpcUrls: ['https://bsc.publicnode.com'], blockExplorerUrls: ['https://bscscan.com'] }] });
+      }
+    }
+    
+    const addr = accounts[0];
+    b.textContent = '✅ ' + addr.slice(0, 6) + '...' + addr.slice(38);
+    s.textContent = '✅ ' + prov.name + ': ' + addr.slice(0, 10) + '...' + addr.slice(-6) + ' · BNB Chain';
+    s.className = 'wallet-status';
+    s.style.display = 'block';
+  } catch (e) {
+    b.textContent = '⛓️ 连接钱包';
+    s.textContent = '❌ 连接失败: ' + (e.message || '用户取消');
+    s.className = 'wallet-status error';
+    s.style.display = 'block';
+  }
+  setTimeout(() => s.style.display = 'none', 5000);
 }
 </script>
 </body>
