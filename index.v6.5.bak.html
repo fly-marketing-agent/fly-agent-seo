@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fly — 小老板的推广搭档</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f7f8;--bg2:#ededf0;--bg3:#ffffff;--sidebar:#303030;--sidebar-text:#b4b4b4;--sidebar-hover:rgba(255,255,255,.06);--sidebar-active:rgba(255,107,53,.12);--orange:#FF6B35;--cyan:#0ea5e9;--green:#22c55e;--red:#ef4444;--text:#1a1a2e;--text2:#6b7280;--text3:#9ca3af;--sans:'Noto Sans SC','Inter',sans-serif;--mono:'Inter',monospace}
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden}body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6}
+.app{display:flex;height:100vh;width:100vw}
+
+/* Sidebar - dark like ChatGPT */
+.sidebar{width:260px;min-width:260px;background:var(--sidebar);color:var(--sidebar-text);display:flex;flex-direction:column;transition:all .3s ease;overflow:hidden}.sidebar.collapsed{width:0;min-width:0;padding:0;border:none}
+.sb-head{padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.sb-logo{font-family:var(--mono);font-size:17px;font-weight:700;letter-spacing:-1px;display:flex;align-items:center;gap:8px}.sb-logo span{color:var(--orange)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.new-btn{font-size:11px;padding:5px 12px;background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);border-radius:8px;color:var(--orange);cursor:pointer;transition:all .15s;font-family:var(--sans)}.new-btn:hover{background:rgba(255,107,53,.25)}
+.conv-scroll{flex:1;overflow-y:auto;overflow-x:hidden}.conv-scroll::-webkit-scrollbar{width:4px}.conv-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}.conv-scroll::-webkit-scrollbar-track{background:transparent}
+.sb-section{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1.5px;padding:12px 14px 4px;flex-shrink:0}
+.conv-item{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:all .15s;border-radius:8px;margin:1px 6px}.conv-item:hover{background:var(--sidebar-hover)}.conv-item.active{background:rgba(255,255,255,.08)}
+.conv-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.conv-info{flex:1;min-width:0}.conv-title{font-size:13px;font-weight:400;color:var(--sidebar-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.conv-sub{font-size:10px;color:rgba(255,255,255,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.conv-badge{font-family:var(--mono);font-size:7px;padding:1px 5px;border-radius:3px;font-weight:500;flex-shrink:0}
+.bg{background:rgba(34,197,113,.15);color:var(--green)}.bo{background:rgba(255,107,53,.15);color:var(--orange)}.br{background:rgba(239,68,68,.15);color:var(--red)}.bc{background:rgba(14,165,233,.15);color:var(--cyan)}
+.ic-o{background:rgba(255,107,53,.12)}.ic-c{background:rgba(14,165,233,.1)}.ic-g{background:rgba(34,197,113,.1)}.ic-y{background:rgba(234,179,8,.1)}.ic-r{background:rgba(239,68,68,.1)}.ic-p{background:rgba(139,92,246,.1)}
+.sb-bottom{border-top:1px solid rgba(255,255,255,.06);padding:8px 12px;flex-shrink:0}
+.sb-agent-mini{display:flex;align-items:center;gap:6px;margin-bottom:3px}.sb-agent-mini .av{width:20px;height:20px;border-radius:5px;background:rgba(255,107,53,.2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--orange)}.sb-agent-mini .name{font-family:var(--mono);font-size:9px;color:var(--cyan)}.sb-agent-mini .st{font-size:8px;color:var(--green);display:flex;align-items:center;gap:2px}.sb-agent-mini .st::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.sb-chain-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:rgba(255,255,255,.25);padding:1px 0}.sb-chain-row a{color:rgba(234,179,8,.6);font-size:8px}
+
+/* Chat main - light like ChatGPT */
+.chat-main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.chat-bar{height:44px;background:var(--bg3);border-bottom:1px solid var(--bg2);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0}
+.chat-bar-l{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);font-weight:500}
+.toggle-btn{width:32px;height:32px;border-radius:8px;background:transparent;border:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s}.toggle-btn:hover{background:var(--bg2);color:var(--text)}
+.chat-bar-r{display:flex;gap:6px}.bar-btn{font-family:var(--sans);font-size:11px;padding:5px 12px;background:transparent;border:1px solid var(--bg2);color:var(--text2);border-radius:6px;cursor:pointer;transition:all .15s}.bar-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+/* Messages */
+.chat-msgs{flex:1;overflow-y:auto;padding:0;scroll-behavior:smooth}.chat-msgs::-webkit-scrollbar{width:4px}.chat-msgs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:2px}
+.msg{padding:12px 0;display:flex;gap:12px;animation:msgIn .3s ease}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes msgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.msg-inner{max-width:720px;margin:0 auto;padding:0 24px;display:flex;gap:12px;width:100%}
+.msg-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.msg-av.bot{background:var(--orange);color:#fff}.msg-av.user{background:var(--cyan);color:#fff}
+.msg-body{flex:1;min-width:0}.msg-who{font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:600}.msg-bb{font-size:14px;color:var(--text);line-height:1.7;word-break:break-word}.msg-bb p{margin-bottom:6px}.msg-bb p:last-child{margin-bottom:0}.msg-bb strong{color:var(--orange)}
+
+/* Welcome center - like Doubao */
+.welcome-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px}
+.welcome-logo{font-family:var(--mono);font-size:36px;font-weight:700;letter-spacing:-2px;margin-bottom:4px}.welcome-logo span{color:var(--orange)}
+.welcome-sub{color:var(--text2);font-size:15px;margin-bottom:28px;text-align:center}
+.example-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:580px;margin-bottom:32px}
+.example-card{padding:10px 16px;background:var(--bg2);border:none;border-radius:20px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.example-card:hover{background:rgba(255,107,53,.1);color:var(--orange)}.example-card .ec-icon{font-size:18px;flex-shrink:0}.example-card .ec-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chip{font-size:12px;padding:5px 14px;background:var(--bg3);border:1px solid var(--bg2);border-radius:20px;color:var(--text2);cursor:pointer;transition:all .15s}.chip:hover{border-color:var(--orange);color:var(--orange)}
+
+/* Typing */
+.typing{display:flex;gap:4px;padding:4px 0}.typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:tb 1.2s infinite}.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}@keyframes tb{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* Input area - like ChatGPT */
+.chat-input{border-top:1px solid var(--bg2);padding:12px 24px 16px;background:var(--bg)}
+.input-wrap{max-width:720px;margin:0 auto;display:flex;align-items:flex-end;gap:8px;background:var(--bg3);border:1px solid var(--bg2);border-radius:16px;padding:8px 12px;transition:border-color .15s}.input-wrap:focus-within{border-color:var(--orange)}
+#chatInput{flex:1;border:none;outline:none;background:transparent;font-size:14px;font-family:var(--sans);color:var(--text);resize:none;max-height:100px;line-height:1.5}
+#chatInput::placeholder{color:var(--text3)}
+.send-btn{width:32px;height:32px;border-radius:8px;background:var(--orange);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0}.send-btn:hover{background:#e55a2b}.send-btn:disabled{opacity:.4;cursor:default}
+.input-hint{text-align:center;font-size:11px;color:var(--text3);margin-top:6px;max-width:720px;margin-left:auto;margin-right:auto}
+
+/* Overlay for wallet/verify */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:none;align-items:center;justify-content:center}.overlay.show{display:flex}
+.ov-card{background:var(--bg3);border-radius:16px;padding:24px;max-width:400px;width:90%}
+.ov-title{font-size:16px;font-weight:600;margin-bottom:12px}.ov-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3)}
+.wallet-btn{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--bg2);border-radius:10px;cursor:pointer;width:100%;margin-bottom:8px;transition:all .15s;font-family:var(--sans);font-size:14px;color:var(--text)}.wallet-btn:hover{border-color:var(--orange)}
+.wToast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:8px 16px;background:var(--bg3);border:1px solid var(--bg2);border-radius:8px;font-size:12px;display:none;z-index:60}
+
+/* Mobile */
+@media(max-width:768px){.sidebar{position:fixed;left:-260px;z-index:20;height:100vh;transition:left .3s}.sidebar.open{left:0}.chat-main{width:100%}.example-grid{grid-template-columns:1fr!important}}
+
+.panel{width:0;overflow:hidden;transition:width .3s ease;background:var(--bg3);border-left:1px solid var(--bg2);display:flex;flex-direction:column}.panel.open{width:360px;min-width:360px}
+.panel-head{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--bg2);flex-shrink:0;font-size:13px;font-weight:500;color:var(--text)}
+.panel-close{width:28px;height:28px;border-radius:6px;background:transparent;border:none;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s}.panel-close:hover{background:var(--bg2);color:var(--text)}
+.panel-body{flex:1;overflow-y:auto;padding:16px}.panel-body::-webkit-scrollbar{width:4px}.panel-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar" id="sidebar">
+    <div class="sb-head">
+      <div class="sb-logo"><span>Fly</span>Agent<div class="sb-dot"></div></div>
+      <button class="new-btn" onclick="newConv()">+ 新对话</button>
+    </div>
+    <div class="conv-scroll" id="convScroll"></div>
+    <div class="sb-bottom" style="padding:10px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:8px">
+      <div style="width:24px;height:24px;border-radius:6px;background:rgba(255,107,53,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--orange)">F</div>
+      <span style="font-size:11px;color:var(--sidebar-text)">Fly Agent</span>
+      <span style="margin-left:auto;width:5px;height:5px;border-radius:50%;background:var(--green)"></span>
+    </div>
+  </div>
+  <div class="chat-main">
+    <div class="chat-bar">
+      <div class="chat-bar-l"><button class="toggle-btn" onclick="toggleSB()">☰</button><span id="chatTitle">新对话</span></div>
+      <div class="chat-bar-r"><button class="bar-btn" onclick="sendQuick('我想验证链上数据')">⛓️ 验证</button></div>
+    </div>
+    <div class="chat-msgs" id="chatMsgs"></div>
+    <div class="chat-input">
+      <div class="input-wrap">
+        <textarea id="chatInput" rows="1" placeholder="告诉我你的店，我帮你诊断推广盲区..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+        <button class="send-btn" onclick="sendMsg()">↑</button>
+      </div>
+      <div class="input-hint">按 Enter 发送 · Shift+Enter 换行 · 数据永久链上存证</div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel"><div class="panel-head"><span id="panelTitle">详情</span><button class="panel-close" onclick="closePanel()">✕</button></div><div class="panel-body" id="panelBody"></div></div>
+<div class="overlay" id="wOv" onclick="if(event.target===this)this.classList.remove('show')"><div class="ov-card" style="position:relative"><button class="ov-close" onclick="document.getElementById('wOv').classList.remove('show')">✕</button><div class="ov-title">⛓️ 连接钱包验证</div><button class="wallet-btn" onclick="connW('binance')"><span>🟡</span>Binance Wallet</button><button class="wallet-btn" onclick="connW('okx')"><span>⭕</span>OKX Wallet</button><button class="wallet-btn" onclick="connW('bitget')"><span>🟢</span>Bitget Wallet</button><button class="wallet-btn" onclick="connW('metamask')"><span>🦊</span>MetaMask</button></div></div>
+<div class="wToast" id="wToast"></div>
+
+<script>
+const PAT='sat_TZOQ6PbNVji5YHZoqzr8bFzCWN5I8k7wEDyan9kfaVBfrBladvimJksZynzIZNaq',BOT_ID='7634446147243311138',DS_KEY='sk-e8f914e6bb8741b982af41f325a79c6a',UID='web_'+Math.random().toString(36).slice(2,10);
+let activeConv='c0',convs={};
+const C=document.getElementById('chatMsgs');
+const convDefs=[
+{id:'c0',icon:'💬',title:'开始对话',ic:'ic-g',sec:'对话',init:[]}},
+{id:'c1',icon:'🕳️',title:'推广黑洞诊断',ic:'ic-o',sec:'工具',init:[{r:'bot',h:'<p>🕳️ <strong>推广黑洞诊断</strong></p><p>你不是不会推广，<strong>你是不知道哪里有效</strong>。平均每100块推广费，只有32块真正带来客户。</p><p>告诉我你每月推广费多少：</p><div class="chips"><span class="chip" onclick="sendQuick(\'我每月推广费3000\')">3000元/月</span><span class="chip" onclick="sendQuick(\'我每月推广费5000\')">5000元/月</span><span class="chip" onclick="sendQuick(\'我每月推广费1万\')">1万/月</span><span class="chip" onclick="sendQuick(\'我每月推广费3万以上\')">3万+/月</span></div>'}]},
+{id:'c2',icon:'📋',title:'AI执行记录',ic:'ic-r',sec:'工具',init:[{r:'bot',h:'<p>📋 <strong>AI执行记录</strong></p><p>Fly每天替你做这些事：</p><p>✅ 监控各渠道花费和效果<br>✅ 超预算自动止损<br>✅ 老客户7天未到店自动召回<br>✅ 竞品降价立即提醒</p><p>想知道今天执行了什么？输入"今天的执行日志"</p>'}]},
+{id:'c3',icon:'🤖',title:'Agent员工档案',ic:'ic-c',sec:'档案',init:[{r:'bot',h:'<p>🤖 <strong>Agent员工档案</strong></p><p>你的AI员工已入职 <strong>37天</strong>，累计做出 <strong>89次</strong>经营决策，帮你止损 <strong>¥2,860</strong>，增收 <strong>¥8,320</strong>。</p><p>它知道：✅ 哪个时间客流最高 ✅ 哪种套餐利润最高 ✅ 哪类客户最容易复购 ✅ 哪个平台最容易浪费预算</p>'}]},
+{id:'c4',icon:'📊',title:'真实案例',ic:'ic-o',sec:'档案',init:[{r:'bot',h:'<p>📊 <strong>真实案例</strong></p><p>成都某火锅店，月推广费1.2万：</p><p>❌ 之前：美团投6000到店32人，传单投3000到店8人<br>✅ Fly介入后：砍掉传单，美团预算调到4000到店41人，省出8000投小红书到店27人<br>📈 总到店从40→68人，推广费没变，到店<strong>提升70%</strong></p>'}]},
+{id:'c5',icon:'🌐',title:'经营因果网络',ic:'ic-p',sec:'档案',init:[{r:'bot',h:'<p>🌐 <strong>经营因果网络</strong></p><p>已有 <strong>2,661家</strong>实体店铺、<strong>117万次</strong>推广行为、<strong>70万条</strong>到店记录、<strong>18万条</strong>复购路径。</p><p>Fly不是工具，是<strong>行业级经营智能网络</strong> —— 每家店的数据互相验证，越用越准。</p>'}]},
+{id:'c6',icon:'🔐',title:'数据可信',ic:'ic-g',sec:'信任',init:[{r:'bot',h:'<p>🔐 <strong>数据可信</strong></p><p>你的经营数据，<strong>属于你自己</strong>。核心数据永久存证在BNB Chain，平台无法删改。</p><p>🔐 Agent唯一身份：合约 <strong>0x8004A169</strong><br>🌳 经营数据永久存证：交易 <strong>0x48d31b85</strong><br>💰 透明支付：合约 <strong>0x55d3...7955</strong></p><p>以上数据均可在 BscScan 实时验证。</p>'}]},
+{id:'c7',icon:'⛓️',title:'数据验证',ic:'ic-y',sec:'信任',init:[{r:'bot',h:'<p>⛓️ <strong>数据验证</strong></p><p>你的经营数据永久存证在BNB Chain上，任何人都可以验证真实性，平台无法删改。</p><p>想验证哪项数据？</p><div class="chips"><span class="chip" onclick="sendQuick(\'验证Agent身份\')">🔐 Agent身份</span><span class="chip" onclick="sendQuick(\'验证经营数据\')">🌳 经营数据</span><span class="chip" onclick="sendQuick(\'验证支付记录\')">💰 支付记录</span></div>'}]},
+{id:'c8',icon:'💰',title:'定价',ic:'ic-o',sec:'信任',init:[{r:'bot',h:'<p>💰 <strong>定价</strong></p><p><strong style="color:var(--orange)">首月体验 ¥199</strong><br>1店1月完整服务 · 诊断报告 · 定制方案 · 5次存证 · 微信1对1</p><p><strong style="color:var(--cyan)">月度服务 ¥399/月</strong><br>持续服务 · 因果追踪 · 每日日报 · 无限存证</p><p style="color:var(--green)">✓ 30天3个有效归因否则全额退款</p>'}]}
+];
+convDefs.forEach(d=>{convs[d.id]={msgs:[...d.init],history:[]}});
+
+function renderSidebar(){const s=document.getElementById('convScroll');let h='',ls='';convDefs.forEach(d=>{if(d.sec!==ls){h+='<div class="sb-section">'+d.sec+'</div>';ls=d.sec}h+='<div class="conv-item'+(activeConv===d.id?' active':'')+'" onclick="switchConv(\''+d.id+'\')"><div class="conv-icon '+d.ic+'">'+d.icon+'</div><div class="conv-title">'+d.title+'</div></div>'});s.innerHTML=h}
+
+function switchConv(id){activeConv=id;renderSidebar();
+if(id==='c0'||id.startsWith('n')){
+C.innerHTML='';
+if(convs[id].msgs.length===0){showWelcome()}else{convs[id].msgs.forEach(m=>renderMsg(m.r,m.h))}
+document.getElementById('chatTitle').textContent=convDefs.find(d=>d.id===id).title;
+closePanel();
+}else{
+openPanel(convDefs.find(d=>d.id===id));
+}}
+
+function renderMsg(role,html){const d=document.createElement('div');d.className='msg';d.innerHTML='<div class="msg-inner"><div class="msg-av '+(role==='bot'?'bot':'user')+'">'+(role==='bot'?'F':'U')+'</div><div class="msg-body"><div class="msg-who">'+(role==='bot'?'FlyAgent':'你')+'</div><div class="msg-bb">'+html+'</div></div></div>';C.appendChild(d);C.scrollTop=C.scrollHeight}
+
+let newCount=0;
+function newConv(){newCount++;const id='n'+newCount;convDefs.unshift({id:id,icon:'💬',title:'新对话 '+newCount,ic:'ic-g',sec:'对话'});convs[id]={msgs:[],history:[]};switchConv(id);showWelcome()}
+
+function showWelcome(){C.innerHTML='<div class="welcome-center"><div class="welcome-logo"><span>Fly</span>Agent</div><div class="welcome-sub">帮你做推广，说店就行</div><div class="example-grid"><div class="example-card" onclick="sendQuick(\'我是成都开火锅店的\')"><span class="ec-icon">🌶️</span><span class="ec-text">成都火锅店，推广费不知道花哪了</span></div><div class="example-card" onclick="sendQuick(\'我是杭州开奶茶店的\')"><span class="ec-icon">🧋</span><span class="ec-text">杭州奶茶店，想提高复购率</span></div><div class="example-card" onclick="sendQuick(\'帮我诊断推广盲区\')"><span class="ec-icon">🔍</span><span class="ec-text">帮我诊断推广盲区，看看哪里浪费了</span></div><div class="example-card" onclick="sendQuick(\'我每月推广费5000\')"><span class="ec-icon">🕳️</span><span class="ec-text">每月推广费5000，到店的人没几个</span></div></div></div>'}
+
+async function getAIReply(msg,hist){
+const instant=smartReply(msg);
+if(instant)return instant;
+hist.push({role:'user',content:msg,content_type:'text'});
+try{const dsH=hist.slice(-8).map(m=>({role:m.role==='user'?'user':'assistant',content:m.content}));const r=await fetch('https://api.deepseek.com/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+DS_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:'你是Fly的AI员工，专门帮小老板诊断推广盲区、优化营销。你必须遵守以下规则：\n1. 像真人聊天，不要念稿、不要列清单、不要用模板回复\n2. 每次回复只说1-2个要点，说完就追问，不要一次甩一堆\n3. 用户说不清楚时，主动追问具体信息（什么店？在哪？月推广费多少？投了哪些平台？效果怎样？）\n4. 记住上下文，不要重复问已经知道的信息\n5. 说话要像朋友聊天，不要像客服FAQ\n6. 先理解用户处境，再给建议，不要上来就甩方案\n7. 用人话解释专业概念\n8. 回复控制在100字以内，简洁有力\n用中文回复。'},...dsH],max_tokens:300,temperature:0.7})});const d=await r.json();if(d.choices&&d.choices[0]){const t=d.choices[0].message.content;hist.push({role:'assistant',content:t,content_type:'text'});return t}}catch(e){}
+try{const r=await fetch('https://api.coze.cn/v3/chat',{method:'POST',headers:{'Authorization':'Bearer '+PAT,'Content-Type':'application/json'},body:JSON.stringify({bot_id:BOT_ID,user_id:UID,stream:false,auto_save_history:true,additional_messages:hist.slice(-6)})});const d=await r.json();if(d.code===0&&d.data){const cid=d.data.id,vid=d.data.conversation_id;for(let i=0;i<8;i++){await new Promise(r=>setTimeout(r,1000));const cr=await fetch('https://api.coze.cn/v3/chat/retrieve?chat_id='+cid+'&conversation_id='+vid,{headers:{'Authorization':'Bearer '+PAT}});const cd=await cr.json();if(cd.data&&cd.data.status==='completed'){const mr=await fetch('https://api.coze.cn/v3/chat/message/list?chat_id='+cid+'&conversation_id='+vid,{headers:{'Authorization':'Bearer '+PAT}});const md=await mr.json();if(md.data){const a=md.data.find(m=>m.role==='assistant'&&m.type==='answer');if(a){hist.push({role:'assistant',content:a.content,content_type:'text'});return a.content}}}if(cd.data&&(cd.data.status==='failed'||cd.data.status==='requires_action'))break}}}catch(e){}
+return '我暂时没想好怎么回答，换个方式说说？🤔'}
+
+function smartReply(msg){const m=msg.toLowerCase();
+// Only instant replies for clear commands - NOT for industry/city keywords
+if(/我要首月体验/.test(m))return '首月体验 ¥199 包含：\n✅ 1店1月完整服务 ✅ 诊断报告 ✅ 定制方案 ✅ 5次存证 ✅ 微信1对1\n\n支付：BSC链上USDT 或 微信支付\n📩 添加微信 One1913U';
+if(/我要订阅月度/.test(m))return '月度服务 ¥399/月 包含：\n✅ 持续服务 ✅ 因果追踪+策略优化 ✅ 每日日报 ✅ 无限存证\n\n30天保障：3条有效归因否则全额退款。';
+if(/验证.*身份|身份.*验证/.test(m))return '🔐 Agent身份验证\n\n合约地址：0x8004A169\n在 BscScan 上可实时查询验证\n👉 https://bscscan.com/address/0x8004A169';
+if(/验证.*数据|数据.*验证|经营数据/.test(m))return '🌳 经营数据存证验证\n\n交易哈希：0x48d31b8575cd69225e5b4a9a0ee80eba8d842159fb892b7b799629f705a83cf8\n在 BscScan 上可实时查询验证\n👉 https://bscscan.com/tx/0x48d31b8575cd69225e5b4a9a0ee80eba8d842159fb892b7b799629f705a83cf8';
+if(/验证.*支付|支付.*验证|支付记录/.test(m))return '💰 透明支付验证\n\n支付合约：0x55d3...7955\n在 BscScan 上可实时查询验证\n👉 https://bscscan.com/token/0x55d3';
+// Industry/city/推广费 - let DeepSeek handle with context, don't use templates
+return null}
+
+async function sendMsg(){const i=document.getElementById('chatInput'),t=i.value.trim();if(!t)return;convs[activeConv].msgs.push({r:'user',h:'<p>'+escH(t)+'</p>'});renderMsg('user','<p>'+escH(t)+'</p>');i.value='';i.style.height='auto';const tp=document.createElement('div');tp.className='msg';tp.id='tp';tp.innerHTML='<div class="msg-inner"><div class="msg-av bot">F</div><div class="msg-body"><div class="msg-who">FlyAgent</div><div class="msg-bb"><div class="typing"><span></span><span></span><span></span></div></div></div></div>';C.appendChild(tp);C.scrollTop=C.scrollHeight;const reply=await getAIReply(t,convs[activeConv].history);tp.remove();const html='<p>'+reply.replace(/\n/g,'<br>')+'</p>';convs[activeConv].msgs.push({r:'bot',h:html});renderMsg('bot',html)}
+function sendQuick(t){document.getElementById('chatInput').value=t;sendMsg()}
+function escH(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+const WP={binance:{g:()=>window.BinanceChain,n:'Binance Wallet'},okx:{g:()=>window.okxwallet,n:'OKX Wallet'},bitget:{g:()=>window.bitkeep?.ethereum,n:'Bitget Wallet'},metamask:{g:()=>window.ethereum,n:'MetaMask'}};
+async function connW(k){const p=WP[k]?.g();if(!p){sendQuick('验证链上数据');document.getElementById('wOv').classList.remove('show');return}document.getElementById('wOv').classList.remove('show');const t=document.getElementById('wToast');try{const a=await p.request({method:'eth_requestAccounts'});if(!a?.length)throw new Error('No accounts');let c=await p.request({method:'eth_chainId'});if(c!=='0x38'){try{await p.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]})}catch(e){await p.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:['https://bsc.publicnode.com'],blockExplorerUrls:['https://bscscan.com']}]})}}t.textContent='✅ '+WP[k].n+': '+a[0].slice(0,10)+'...'+a[0].slice(-6);t.style.display='block';t.style.borderColor='rgba(34,197,113,.3)';t.style.color='var(--green)';setTimeout(()=>{t.style.display='none'},5000)}catch(e){t.textContent='❌ '+(e.message||'用户取消');t.style.display='block';t.style.borderColor='rgba(239,68,68,.3)';t.style.color='var(--red)';setTimeout(()=>{t.style.display='none'},3000)}}
+
+
+function openPanel(def){
+const p=document.getElementById('panel'),pb=document.getElementById('panelBody'),pt=document.getElementById('panelTitle');
+pt.textContent=def.icon+' '+def.title;
+let h='';
+convs[def.id].msgs.forEach(m=>{h+='<div style="padding:8px 0"><div style="display:flex;gap:8px"><div class="msg-av '+(m.r==='bot'?'bot':'user')+'" style="width:26px;height:26px;font-size:10px">'+(m.r==='bot'?'F':'U')+'</div><div style="flex:1;min-width:0"><div class="msg-bb" style="font-size:13px;line-height:1.6">'+m.h+'</div></div></div></div>'});
+pb.innerHTML=h;p.classList.add('open');
+}
+function closePanel(){document.getElementById('panel').classList.remove('open')}
+function toggleSB(){const sb=document.getElementById('sidebar');if(window.innerWidth<=768){sb.classList.toggle('open')}else{sb.classList.toggle('collapsed')}}
+
+const ta=document.getElementById('chatInput');ta.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'});
+switchConv('c0');
+</script>
+</body>
+</html>
