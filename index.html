@@ -171,8 +171,8 @@ footer .links a{font-size:13px;color:var(--text2)}
   <p class="hero-sub">帮你做推广，说店就行</p>
   <p class="hero-en">The Causal Network for Real-World Business</p>
   <div class="hero-ctas">
-    <button class="btn btn-outline" onclick="connectWallet()">⛓️ 连接钱包</button>
     <a class="btn btn-primary" href="#pricing">免费体验</a>
+    <a class="btn btn-outline" href="#chain">查看链上架构 ↓</a>
     <a class="btn btn-ghost" href="https://bscscan.com/tx/0x48d31b8575cd69225e5b4a9a0ee80eba8d842159fb892b7b799629f705a83cf8" target="_blank">查看链上证据 →</a>
   </div>
   <div class="hero-stats">
@@ -444,7 +444,14 @@ async function connectWith(walletKey) {
     
     const addr = accounts[0];
     b.textContent = '✅ ' + addr.slice(0, 6) + '...' + addr.slice(38);
-    s.textContent = '✅ ' + prov.name + ': ' + addr.slice(0, 10) + '...' + addr.slice(-6) + ' · BNB Chain';
+    // 查询BNB余额
+    let balance = '...';
+    try {
+      const balHex = await p.request({ method: 'eth_getBalance', params: [addr, 'latest'] });
+      const balEth = parseFloat(parseInt(balHex,16) / 1e18).toFixed(4);
+      balance = balEth + ' BNB';
+    } catch(e) { balance = 'BNB'; }
+    s.innerHTML = '✅ ' + prov.name + ': ' + addr.slice(0, 10) + '...' + addr.slice(-6) + ' · ' + balance + ' · <a href="https://bscscan.com/address/' + addr + '" target="_blank" style="color:var(--cyan)">BscScan →</a>';
     s.className = 'wallet-status';
     s.style.display = 'block';
   } catch (e) {
@@ -453,7 +460,7 @@ async function connectWith(walletKey) {
     s.className = 'wallet-status error';
     s.style.display = 'block';
   }
-  setTimeout(() => s.style.display = 'none', 5000);
+  // 保持钱包连接状态显示
 }
 </script>
 </body>
