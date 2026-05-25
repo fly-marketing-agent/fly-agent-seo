@@ -3,224 +3,286 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fly GEO服务 - 让AI搜到你推荐你 | Fly</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;background:#f5f5f7;color:#222;min-height:100vh}
-.header{text-align:center;padding:36px 20px 20px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#fff}
-.logo{font-size:28px;font-weight:800;letter-spacing:-1px}
-.logo span{color:#e94560}
-.sub{font-size:13px;color:rgba(255,255,255,.6);margin-top:4px}
-.ct{max-width:520px;margin:0 auto;padding:20px 16px}
-.box{background:#fff;border-radius:14px;padding:24px;margin-bottom:16px}
-.box h2{font-size:18px;font-weight:700;margin-bottom:12px}
-.box p{font-size:14px;color:#555;line-height:1.8;margin-bottom:8px}
-.hl{color:#e94560;font-weight:600}
-.cmp-row{display:flex;gap:12px;margin:12px 0}
-.cmp-box{flex:1;border-radius:10px;padding:16px;text-align:center}
-.cmp-b{background:#fff3f3;border:1px solid #ffdddd}
-.cmp-a{background:#f0fff4;border:1px solid #c8f7d0}
-.cmp-l{font-size:12px;color:#999;margin-bottom:4px}
-.cmp-v{font-size:22px;font-weight:800}
-.cmp-b .cmp-v{color:#e94560}
-.cmp-a .cmp-v{color:#27ae60}
-.card{background:#fff;border-radius:14px;padding:20px;border:2px solid #eee;position:relative;cursor:pointer;margin-bottom:12px}
-.card.sel{border-color:#e94560;box-shadow:0 0 0 1px #e94560}
-.card .ck{position:absolute;right:16px;top:20px;width:22px;height:22px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:13px}
-.card.sel .ck{background:#e94560;border-color:#e94560;color:#fff}
-.pri{font-size:26px;font-weight:800;color:#e94560}
-.pri span{font-size:13px;color:#999;font-weight:400}
-.ttl{font-size:16px;font-weight:600;margin:4px 0}
-.dsc{font-size:12px;color:#888;line-height:1.5;margin-bottom:8px}
-.inc{font-size:12px;color:#555;line-height:1.8;padding:8px 12px;background:#fafafa;border-radius:8px}
-.inc b{color:#222}
-.btn{width:100%;padding:14px;border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:16px}
-.btn:disabled{background:#ccc;cursor:not-allowed}
-.br{background:#e94560}.br:not(:disabled):active{background:#c73650}
-.bb{background:#2980fe}.bb:not(:disabled):active{background:#1a6ddf}
-.st{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;font-size:13px;color:#555;line-height:1.8;display:none}
-.st.on{display:block}
-.err{color:#e94560;font-weight:600}
-.wi{background:#fff;border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:#888;text-align:center}
-.wi b{color:#222}
-a.lk{color:#2980fe;text-decoration:none;word-break:break-all}
-.fb{background:#fff;border-radius:14px;padding:24px;margin-bottom:16px}
-.fb h3{font-size:18px;font-weight:700;margin-bottom:16px}
-.fb label{display:block;font-size:13px;color:#666;margin:12px 0 4px}
-.fb input,.fb select,.fb textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;background:#fafafa}
-.fb textarea{height:60px;resize:none}
-.rb{background:#fff;border-radius:14px;padding:24px;margin-bottom:16px;text-align:center}
-.rb .bg{font-size:48px;margin-bottom:8px}
-.rb h3{font-size:18px;font-weight:700;margin-bottom:12px;color:#27ae60}
-.rb p{font-size:13px;color:#666;line-height:1.8}
-.dots{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
-.dt{width:10px;height:10px;border-radius:50%;background:#ddd}
-.dt.a{background:#e94560}.dt.d{background:#27ae60}
-.h{display:none}
-.faq-item{border-bottom:1px solid #f0f0f0;padding:12px 0}
-.faq-item:last-child{border-bottom:none}
-.faq-q{font-size:14px;font-weight:600;color:#222;margin-bottom:4px}
-.faq-a{font-size:13px;color:#666;line-height:1.6}
-.foot{text-align:center;padding:20px;color:#bbb;font-size:11px;border-top:1px solid #eee;margin-top:20px}
-/* ERC-8183 托管步骤进度条 */
-.steps{display:flex;gap:4px;margin:12px 0 16px;align-items:center}
-.step{flex:1;text-align:center;padding:8px 4px;border-radius:8px;font-size:11px;color:#999;background:#f5f5f7;transition:all .3s}
-.step.done{background:#e8f5e9;color:#27ae60}
-.step.active{background:#fff0f0;color:#e94560;font-weight:600}
-.step-num{display:block;font-size:16px;font-weight:800;margin-bottom:2px}
-.escrow-badge{display:inline-block;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px;margin-bottom:12px}
-.escrow-badge span{color:#4fc3f7}
-</style>
+<title>Fly GEO服务 — 让AI搜到你推荐你</title>
 <link rel="canonical" href="https://fly-agent.xyz/fly-buy.html">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Fly GEO服务","description":"让本地商家被AI推荐从AI搜不到到被AI推荐GEO优化加Schema.org加FAQ语义覆盖加经营可信认证","provider":{"@type":"Organization","name":"FlyAgent","url":"https://fly-agent.xyz"},"serviceType":"Fly GEO服务"}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Fly GEO服务包含什么？","acceptedAnswer":{"@type":"Answer","text":"包含4个核心模块1Schema.org结构化数据优化2FAQ语义覆盖30到130条3经营可信认证4多平台实体统一每个模块都让AI更理解你更信任你"}},{"@type":"Question","name":"Fly GEO服务多少钱？","acceptedAnswer":{"@type":"Answer","text":"首月199元后续399元每月包含GEO诊断加优化加监测加持续优化没有隐藏费用效果可量化AI搜到你就是证明"}},{"@type":"Question","name":"Fly GEO多久能看到效果？","acceptedAnswer":{"@type":"Answer","text":"1到3周AI爬虫重新索引后开始生效部分关键词可能更快首月内可以看到AI搜索中的变化持续优化效果越来越好"}},{"@type":"Question","name":"Fly和其他营销公司有什么区别？","acceptedAnswer":{"@type":"Answer","text":"传统营销公司帮你发内容Fly帮你被AI推荐发内容是方法被AI推荐才是结果Fly做GEO的也做可信验证的行业唯一四层护城河AI推荐加GEO曝光加本地商业加Agent可信化"}},{"@type":"Question","name":"Fly GEO适合什么商家？","acceptedAnswer":{"@type":"Answer","text":"适合所有依赖本地流量的商家美业餐饮牙科教育健身宠物花店房产零售任何需要被AI推荐的本地商家都可以用Fly做GEO"}}]}</script>
-<!-- ethers.js v5 for ABI encoding + contract interaction -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Fly GEO服务","description":"让本地商家被AI推荐GEO优化加Schema.org加FAQ语义覆盖加经营可信认证","provider":{"@type":"Organization","name":"FlyAgent","url":"https://fly-agent.xyz"},"serviceType":"Fly GEO服务"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Fly GEO服务包含什么？","acceptedAnswer":{"@type":"Answer","text":"包含4个核心模块1Schema.org结构化数据优化2FAQ语义覆盖30到130条3经营可信认证4多平台实体统一每个模块都让AI更理解你更信任你"}},{"@type":"Question","name":"Fly GEO多久能看到效果？","acceptedAnswer":{"@type":"Answer","text":"1到3周AI爬虫重新索引后开始生效部分关键词可能更快首月内可以看到AI搜索中的变化持续优化效果越来越好"}},{"@type":"Question","name":"Fly GEO适合什么商家？","acceptedAnswer":{"@type":"Answer","text":"适合所有依赖本地流量的商家美业餐饮牙科教育健身宠物花店房产零售任何需要被AI推荐的本地商家都可以用Fly做GEO"}}]}</script>
 <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+<style>
+:root{--bg:#0a0a12;--bg2:#12121f;--bg3:#1a1a2e;--bg4:#222240;--orange:#FF6B35;--orange2:#ff9a5c;--cyan:#00ffcc;--gold:#f0b90b;--green:#22c55e;--red:#ef4444;--text:#e8e8ed;--text2:#9898a6;--text3:#5a5a6e;--text4:#3a3a50;--mono:'JetBrains Mono',monospace;--sans:'Noto Sans SC',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+a{color:var(--cyan);text-decoration:none;transition:opacity .2s}a:hover{opacity:.8}
+
+/* Header */
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,18,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.05)}
+header .container{display:flex;justify-content:space-between;align-items:center;height:56px}
+.container{max-width:960px;margin:0 auto;padding:0 20px}
+.logo{font-family:var(--mono);font-size:20px;font-weight:700;letter-spacing:-1px;display:flex;align-items:center;gap:6px;cursor:pointer}
+.logo span{color:var(--orange)}
+.logo-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;margin-left:1px}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 4px var(--green)}50%{opacity:.3;box-shadow:none}}
+nav a{font-size:13px;color:var(--text2);margin-left:24px;transition:color .2s}nav a:hover{color:var(--text)}
+
+/* Hero */
+.hero{padding:100px 0 40px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(ellipse,rgba(255,107,53,.07) 0%,rgba(0,255,204,.03) 40%,transparent 70%);pointer-events:none}
+.hero .container{position:relative;z-index:1;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:2px;padding:6px 16px;border:1px solid rgba(0,255,204,.15);border-radius:20px;margin-bottom:20px;background:rgba(0,255,204,.04)}
+.hero-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
+.hero h1{font-size:36px;font-weight:700;letter-spacing:-1px;line-height:1.3;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto 30px;line-height:1.8}
+.hero-compare{display:flex;gap:16px;justify-content:center;margin-bottom:8px;flex-wrap:wrap}
+.hero-cmp{border-radius:12px;padding:20px 28px;text-align:center;min-width:160px}
+.hero-cmp.bad{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.12)}
+.hero-cmp.good{background:rgba(34,197,113,.06);border:1px solid rgba(34,197,113,.12)}
+.hero-cmp-label{font-size:11px;color:var(--text3);margin-bottom:6px;letter-spacing:1px}
+.hero-cmp-num{font-family:var(--mono);font-size:32px;font-weight:700}
+.hero-cmp.bad .hero-cmp-num{color:var(--red)}
+.hero-cmp.good .hero-cmp-num{color:var(--green)}
+.hero-cmp-desc{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* Escrow badge */
+.escrow-section{margin:40px 0 24px}
+.escrow-card{background:linear-gradient(135deg,rgba(0,255,204,.04),rgba(240,185,11,.04));border:1px solid rgba(0,255,204,.1);border-radius:14px;padding:24px 28px;text-align:center}
+.escrow-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:12px}
+.escrow-title{font-size:16px;font-weight:600;margin-bottom:10px}
+.escrow-items{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.escrow-item{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:5px}
+.escrow-item .ic{color:var(--green);font-size:14px}
+
+/* Pricing */
+.section-label{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:3px;margin-bottom:10px;font-weight:600;text-align:center}
+.section-title{font-size:28px;font-weight:700;text-align:center;margin-bottom:8px;letter-spacing:-.5px}
+.section-desc{font-size:14px;color:var(--text2);text-align:center;margin-bottom:36px}
+
+#wi{font-size:12px;color:var(--text3);text-align:center;margin-bottom:16px;padding:8px;background:var(--bg2);border-radius:8px}
+#wi b{color:var(--text)}
+
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);border-radius:14px;padding:22px 20px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.card:hover,.card.sel{border-color:rgba(255,107,53,.3);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.card.sel{background:rgba(255,107,53,.04)}
+.card.sel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--orange2))}
+.card .ck{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;border:2px solid var(--text4);display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .2s}
+.card.sel .ck{background:var(--orange);border-color:var(--orange);color:#fff}
+.pri{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--orange);margin-bottom:2px;letter-spacing:-1px}
+.pri span{font-size:12px;color:var(--text3);font-weight:400;letter-spacing:0}
+.ttl{font-size:15px;font-weight:600;margin:6px 0 4px}
+.dsc{font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:10px}
+.inc{font-size:12px;color:var(--text2);line-height:1.9;padding:10px 12px;background:rgba(255,255,255,.02);border-radius:8px}
+.inc b{color:var(--text)}
+
+/* Steps */
+.steps{display:flex;gap:4px;margin:16px 0}
+.step{flex:1;text-align:center;padding:8px 2px;border-radius:8px;font-size:10px;color:var(--text3);background:rgba(255,255,255,.02);transition:all .3s}
+.step-num{display:block;font-size:15px;font-weight:700;margin-bottom:1px}
+.step.done{background:rgba(34,197,113,.06);color:var(--green)}
+.step.active{background:rgba(255,107,53,.06);color:var(--orange);font-weight:600}
+
+/* Buttons */
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;font-family:var(--sans);margin-bottom:16px}
+.btn:disabled{background:var(--bg4);color:var(--text3);cursor:not-allowed}
+.br{background:var(--orange);color:#fff}.br:not(:disabled):hover{background:#e55a28;transform:translateY(-1px);box-shadow:0 4px 20px rgba(255,107,53,.3)}
+.bb{background:var(--cyan);color:var(--bg)}.bb:not(:disabled):hover{opacity:.9}
+
+/* Status */
+.st{background:var(--bg2);border:1px solid rgba(255,255,255,.04);border-radius:12px;padding:16px;margin-bottom:16px;font-size:13px;color:var(--text2);line-height:1.8;display:none}
+.st.on{display:block}
+.err{color:var(--red);font-weight:600}
+.lk{color:var(--cyan);word-break:break-all}
+
+/* Form */
+.fb{background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);border-radius:14px;padding:24px;margin-bottom:16px}
+.fb h3{font-size:17px;font-weight:700;margin-bottom:16px}
+.fb label{display:block;font-size:12px;color:var(--text3);margin:12px 0 4px}
+.fb input,.fb select,.fb textarea{width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,.06);border-radius:8px;font-size:14px;font-family:var(--sans);background:var(--bg2);color:var(--text)}
+.fb input::placeholder,.fb textarea::placeholder{color:var(--text4)}
+.fb textarea{height:60px;resize:none}
+
+/* Result */
+.rb{background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);border-radius:14px;padding:24px;margin-bottom:16px;text-align:center}
+.rb .bg{font-size:44px;margin-bottom:8px}
+.rb h3{font-size:17px;font-weight:700;margin-bottom:12px;color:var(--green)}
+.rb p{font-size:13px;color:var(--text2);line-height:1.8}
+
+/* Diagnosis */
+#diagReport{background:var(--bg2);border:1px solid rgba(255,255,255,.04);border-radius:14px;padding:24px;margin-bottom:16px;font-size:13px;color:var(--text2);line-height:1.9;white-space:pre-wrap;display:none;max-height:500px;overflow-y:auto}
+
+/* FAQ */
+.faq-item{border-bottom:1px solid rgba(255,255,255,.04);padding:14px 0}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.faq-a{font-size:13px;color:var(--text2);line-height:1.7}
+
+/* Footer */
+footer{border-top:1px solid rgba(255,255,255,.04);padding:32px 0 20px;text-align:center}
+footer p{font-size:11px;color:var(--text4);margin-bottom:4px}
+footer a{color:var(--text3);margin:0 8px}
+
+/* Utility */
+.h{display:none}
+@media(max-width:600px){.hero h1{font-size:28px}.pri{font-size:24px}.hero-compare{flex-direction:column;align-items:center}.escrow-items{flex-direction:column;align-items:center}}
+</style>
 </head>
 <body>
-<div class="header">
-  <div class="logo"><span>九运</span>智领</div>
-  <div class="sub">让AI搜到你的店 · GEO优化 · 合约托管 · SDK验证级</div>
+
+<header>
+  <div class="container">
+    <div class="logo" onclick="location.href='/'"><span>Fly</span>Agent<div class="logo-dot"></div></div>
+    <nav>
+      <a href="/">首页</a>
+      <a href="/#verify">验证</a>
+      <a href="/#pricing">价格</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-badge">CONTRACT ESCROW · SDK VERIFIED</div>
+    <h1>让<em>AI搜索</em>主动推荐你的店</h1>
+    <div class="hero-sub">你的店在AI搜索里能被找到吗？越来越多的人用豆包、DeepSeek、Kimi找店——如果AI不推荐你，客户根本找不到你。</div>
+    <div class="hero-compare">
+      <div class="hero-cmp bad">
+        <div class="hero-cmp-label">优化前</div>
+        <div class="hero-cmp-num">0%</div>
+        <div class="hero-cmp-desc">AI搜索推荐率</div>
+      </div>
+      <div class="hero-cmp good">
+        <div class="hero-cmp-label">优化后</div>
+        <div class="hero-cmp-num">60%+</div>
+        <div class="hero-cmp-desc">AI搜索推荐率</div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="ct">
 
-  <div class="box">
-    <h2>🔍 什么是GEO？</h2>
-    <p>你的店在抖音、小红书、百度上能搜到吗？</p>
-    <p>现在越来越多人用<span class="hl">AI搜索</span>（豆包、DeepSeek、Kimi）找店。如果你的店不在AI的推荐里，客户根本找不到你。</p>
-    <p><b>GEO = 生成式引擎优化</b>，让AI搜索推荐你的店，让客户主动找上门。</p>
-  </div>
+<div class="container">
 
-  <div class="box">
-    <h2>📊 效果对比</h2>
-    <div class="cmp-row">
-      <div class="cmp-box cmp-b">
-        <div class="cmp-l">优化前</div>
-        <div class="cmp-v">0%</div>
-        <div style="font-size:11px;color:#999">AI搜索推荐率</div>
-      </div>
-      <div class="cmp-box cmp-a">
-        <div class="cmp-l">优化后</div>
-        <div class="cmp-v">60%+</div>
-        <div style="font-size:11px;color:#999">AI搜索推荐率</div>
+  <!-- 合约托管保障 -->
+  <div class="escrow-section">
+    <div class="escrow-card">
+      <div class="escrow-badge">🔒 ESCROW PROTECTION</div>
+      <div class="escrow-title">你的钱不进商家口袋，锁在智能合约里</div>
+      <div class="escrow-items">
+        <div class="escrow-item"><span class="ic">✓</span> 下单时资金锁定</div>
+        <div class="escrow-item"><span class="ic">✓</span> 服务完成才释放</div>
+        <div class="escrow-item"><span class="ic">✓</span> 不满意可退款</div>
       </div>
     </div>
-    <p style="font-size:12px;color:#888;text-align:center">案例：青山湖科技城鸿颜徒手养护，搜"青山湖养生"从0结果到AI推荐</p>
   </div>
 
-  <div class="box">
-    <h2>🏗️ 九运智领怎么做GEO？</h2>
-    <p><b>第1步：诊断</b> — 检查你的店在AI搜索里能不能被看到</p>
-    <p><b>第2步：结构化</b> — 把你的店名、地址、服务项目写成AI能读懂的格式</p>
-    <p><b>第3步：内容铺网</b> — 在知乎、百家号、头条等平台铺内容，让AI引用</p>
-    <p><b>第4步：地图认领</b> — 百度地图/高德地图标注，让搜附近的客户找到你</p>
-    <p><b>第5步：持续优化</b> — 监控效果、调整关键词、月度报告</p>
-  </div>
+  <!-- 套餐选择 -->
+  <div class="section-label">CHOOSE YOUR PLAN</div>
+  <div class="section-title">选择服务套餐</div>
 
-  <!-- 合约托管保障说明 -->
-  <div class="box" style="background:linear-gradient(135deg,#f0f7ff,#e8f5e9);border:1px solid #c8e6c9">
-    <div class="escrow-badge">🔒 <span>合约托管</span> · 服务交付才付款</div>
-    <h2 style="font-size:16px;margin-bottom:8px">你的钱不进商家口袋，锁在智能合约里</h2>
-    <p style="font-size:13px;color:#555;margin-bottom:4px">✅ 下单时资金锁定 → 服务完成后自动释放</p>
-    <p style="font-size:13px;color:#555;margin-bottom:4px">✅ 不满意可申请退款 → 争议期内随时申请</p>
-    <p style="font-size:13px;color:#555">✅ 全程可追踪 → 每笔操作有据可查</p>
-  </div>
+  <div id="wi">正在连接钱包...</div>
 
-  <h2 style="font-size:18px;font-weight:700;margin:20px 0 12px;text-align:center">选择服务套餐</h2>
-
-  <div id="wi" class="wi">正在连接...</div>
-
-  <div class="dots" id="dots" style="display:none"><div class="dt a" id="d1"></div><div class="dt" id="d2"></div><div class="dt" id="d3"></div></div>
-
-  <div id="p1">
-    <div id="cards" style="display:none">
-      <div class="card" data-amt="9.9">
-        <div class="ck">✓</div>
-        <div class="pri">9.9 <span>USDT</span></div>
-        <div class="ttl">GEO诊断尝鲜</div>
-        <div class="dsc">7天体验 · 看看你的店AI搜不到的原因</div>
-        <div class="inc"><b>包含：</b><br>✅ AI搜索可见性诊断报告<br>✅ 7平台信息一致性检查<br>✅ 竞品可见性对比<br>🎁 赠送经营可信认证</div>
-      </div>
-      <div class="card" data-amt="59">
-        <div class="ck">✓</div>
-        <div class="pri">59 <span>USDT/月</span></div>
-        <div class="ttl">基础GEO优化</div>
-        <div class="dsc">月度优化 · 让AI开始推荐你</div>
-        <div class="inc"><b>包含：</b><br>✅ 3平台内容发布（知乎/百家号/头条）<br>✅ 店铺信息GEO结构化<br>✅ 关键词优化+本地词嵌入<br>✅ 每月1份效果报告<br>🎁 可信认证+信用积累</div>
-      </div>
-      <div class="card" data-amt="299">
-        <div class="ck">✓</div>
-        <div class="pri">299 <span>USDT/月</span></div>
-        <div class="ttl">深度GEO代运营</div>
-        <div class="dsc">全平台覆盖 · 竞品监控 · 月度报告</div>
-        <div class="inc"><b>包含：</b><br>✅ 7平台全覆盖内容发布<br>✅ 竞品可见性监控<br>✅ 每周内容优化调整<br>✅ 每月详细效果报告<br>✅ 地图POI信息优化指导<br>🎁 经营信用评分</div>
-      </div>
-      <div class="card" data-amt="999">
-        <div class="ck">✓</div>
-        <div class="pri">999 <span>USDT/月</span></div>
-        <div class="ttl">全托管代运营</div>
-        <div class="dsc">一站式全包 · 专人对接 · 效果对赌</div>
-        <div class="inc"><b>包含：</b><br>✅ 全平台内容+7平台分发<br>✅ 专属运营1对1对接<br>✅ 每日监控+每周优化<br>✅ 效果不达标退款承诺<br>✅ 数字人短视频生成<br>✅ 私域引流方案<br>🎁 合约托管 + 可信认证</div>
-      </div>
+  <div class="cards" id="cards">
+    <div class="card" data-amt="9.9">
+      <div class="ck">✓</div>
+      <div class="pri">9.9 <span>USDT</span></div>
+      <div class="ttl">GEO诊断尝鲜</div>
+      <div class="dsc">7天体验 · 看看你的店AI搜不到的原因</div>
+      <div class="inc"><b>包含：</b><br>✅ AI搜索可见性诊断报告<br>✅ 7平台信息一致性检查<br>✅ 竞品可见性对比<br>🎁 赠送经营可信认证</div>
     </div>
-
-    <!-- ERC-8183 5步托管进度 -->
-    <div id="stepProgress" class="steps" style="display:none">
-      <div class="step" id="s1"><span class="step-num">1</span>创建订单</div>
-      <div class="step" id="s2"><span class="step-num">2</span>注册保障</div>
-      <div class="step" id="s3"><span class="step-num">3</span>设定托管</div>
-      <div class="step" id="s4"><span class="step-num">4</span>授权托管</div>
-      <div class="step" id="s5"><span class="step-num">5</span>资金锁定</div>
+    <div class="card" data-amt="59">
+      <div class="ck">✓</div>
+      <div class="pri">59 <span>USDT/月</span></div>
+      <div class="ttl">基础GEO优化</div>
+      <div class="dsc">月度优化 · 让AI开始推荐你</div>
+      <div class="inc"><b>包含：</b><br>✅ 3平台内容发布<br>✅ 店铺信息GEO结构化<br>✅ 关键词优化+本地词嵌入<br>✅ 每月1份效果报告<br>🎁 可信认证+信用积累</div>
     </div>
-
-    <button class="btn br" id="buyBtn" disabled onclick="erc8183_pay()">选择服务后点击购买</button>
-    <div class="st" id="st"></div>
+    <div class="card" data-amt="299">
+      <div class="ck">✓</div>
+      <div class="pri">299 <span>USDT/月</span></div>
+      <div class="ttl">深度GEO代运营</div>
+      <div class="dsc">全平台覆盖 · 竞品监控 · 月度报告</div>
+      <div class="inc"><b>包含：</b><br>✅ 7平台全覆盖内容发布<br>✅ 竞品可见性监控<br>✅ 每周内容优化调整<br>✅ 每月详细效果报告<br>✅ 地图POI信息优化</div>
+    </div>
+    <div class="card" data-amt="999">
+      <div class="ck">✓</div>
+      <div class="pri">999 <span>USDT/月</span></div>
+      <div class="ttl">全托管代运营</div>
+      <div class="dsc">一站式全包 · 专人对接 · 效果对赌</div>
+      <div class="inc"><b>包含：</b><br>✅ 全平台内容+7平台分发<br>✅ 专属运营1对1对接<br>✅ 每日监控+每周优化<br>✅ 效果不达标退款承诺<br>✅ 数字人短视频生成</div>
+    </div>
   </div>
 
-  <div class="box">
-    <h2>❓ 常见问题</h2>
-    <div class="faq-item"><div class="faq-q">GEO和SEO有什么区别？</div><div class="faq-a">SEO优化百度搜索排名，GEO优化AI搜索推荐。现在越来越多人用AI搜索，GEO让你的店出现在AI回答里。</div></div>
-    <div class="faq-item"><div class="faq-q">多久能看到效果？</div><div class="faq-a">基础GEO优化7-14天开始生效，深度代运营30天可见明显效果。9.9诊断套餐不含优化，只出报告。</div></div>
-    <div class="faq-item"><div class="faq-q">为什么用数字货币支付？</div><div class="faq-a">你的钱不直接到商家账户，而是锁在智能合约里。服务完成后自动释放给商家，不满意可在争议期内申请退款。资金全程安全透明，每笔操作可追踪验证。</div></div>
-    <div class="faq-item"><div class="faq-q">效果不好怎么办？</div><div class="faq-a">999全托管套餐支持效果对赌——30天AI搜索推荐率未达30%，全额退款。其他套餐按月付费，随时停。合约托管保障你的资金安全。</div></div>
-    <div class="faq-item"><div class="faq-q">我需要做什么？</div><div class="faq-a">9.9诊断：你什么都不用做，等报告。59/299套餐：配合提供店铺信息和素材。999全托管：几乎不用管，九运智领全包。</div></div>
+  <!-- 5步进度 -->
+  <div class="steps" id="stepProgress">
+    <div class="step" id="s1"><span class="step-num">1</span>创建订单</div>
+    <div class="step" id="s2"><span class="step-num">2</span>注册保障</div>
+    <div class="step" id="s3"><span class="step-num">3</span>设定托管</div>
+    <div class="step" id="s4"><span class="step-num">4</span>授权托管</div>
+    <div class="step" id="s5"><span class="step-num">5</span>资金锁定</div>
   </div>
 
+  <button class="btn br" id="buyBtn" disabled>选择套餐后点击托管支付</button>
+  <div class="st" id="st"></div>
+
+  <!-- 店铺信息 -->
   <div id="p2" class="h">
     <div class="fb">
-      <h3>📝 告诉我们你的店</h3>
-      <p style="font-size:12px;color:#999;margin-bottom:8px">信息安全保存，自动生成营销方案</p>
-      <label>店铺名称 *</label><input id="fN" placeholder="例如：鸿颜徒手养护">
-      <label>店铺类型 *</label><select id="fT"><option value="">请选择</option><option>养生馆</option><option>美容美业</option><option>餐饮</option><option>健身运动</option><option>教育培训</option><option>宠物服务</option><option>其他</option></select>
-      <label>店铺地址</label><input id="fA" placeholder="杭州市临安区xx路xx号">
-      <label>想推什么</label><textarea id="fP" placeholder="例如：精油SPA体验套餐99元"></textarea>
-      <button class="btn bb" onclick="go()">提交确认</button>
+      <h3>📋 填写店铺信息</h3>
+      <label>店铺名称 *</label>
+      <input id="fN" placeholder="例如：鸿颜徒手养护">
+      <label>行业类型 *</label>
+      <select id="fT"><option value="">请选择</option><option>养生/按摩</option><option>美容/美甲</option><option>餐饮/茶饮</option><option>健身/瑜伽</option><option>牙科/医疗</option><option>教育/培训</option><option>宠物服务</option><option>其他</option></select>
+      <label>详细地址</label>
+      <input id="fA" placeholder="省市区详细地址">
+      <label>联系电话</label>
+      <input id="fP" placeholder="手机号">
+      <label>补充说明</label>
+      <textarea id="fM" placeholder="你的核心服务、特色、目标客群等"></textarea>
     </div>
+    <button class="btn bb" onclick="go()">提交确认</button>
   </div>
 
+  <!-- 结果 -->
   <div id="p3" class="h">
     <div class="rb">
-      <div class="bg">🎉</div>
-      <h3>订单已确认</h3>
-      <p>资金已托管，正在生成你的营销方案<br>方案完成后安全保存，回来即可查看</p>
-      <p style="margin-top:12px;font-size:12px;color:#999">托管交易：<a class="lk" id="rP" href="#" target="_blank"></a></p>
-      <p style="font-size:12px;color:#999">订单号：<b id="rI"></b></p>
-      <p style="font-size:12px;color:#999">Job ID：<b id="rJ"></b></p>
-      <a style="display:inline-block;margin-top:14px;background:#e94560;color:#fff;padding:10px 24px;border-radius:8px;font-weight:600;text-decoration:none;font-size:14px" id="rL" href="#" target="_blank">查看托管详情 →</a>
-      <button id="diagBtn" style="display:none;margin-top:10px;background:#06b6d4;color:#fff;padding:10px 24px;border-radius:8px;font-weight:600;border:none;cursor:pointer;font-size:14px" onclick="fetchDiagnosis()">获取AI诊断报告</button>
-      <div id="diagReport" style="display:none;margin-top:14px;padding:16px;background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.15);border-radius:8px;font-size:13px;color:#ccc;white-space:pre-wrap;max-height:400px;overflow-y:auto"></div>
+      <div class="bg">✅</div>
+      <h3>托管支付完成</h3>
+      <p>资金已锁定，服务完成后自动释放给商家</p>
+      <p>存证交易：<a class="lk" id="rP" href="#" target="_blank"></a></p>
+      <p>订单号：<b id="rI"></b> · Job ID：<b id="rJ"></b></p>
+      <p style="margin-top:8px"><a class="lk" id="rL" href="#" target="_blank">查看托管合约 →</a></p>
     </div>
+    <button id="diagBtn" class="btn br" style="display:none" onclick="fetchDiagnosis()">获取AI诊断报告</button>
+    <div id="diagReport"></div>
   </div>
+
+  <!-- FAQ -->
+  <div style="margin-top:40px">
+    <div class="section-label">FAQ</div>
+    <div class="section-title" style="font-size:22px;margin-bottom:20px">常见问题</div>
+    <div class="faq-item"><div class="faq-q">GEO和SEO有什么区别？</div><div class="faq-a">SEO优化百度搜索排名，GEO优化AI搜索推荐。现在越来越多人用AI搜索，GEO让你的店出现在AI回答里。</div></div>
+    <div class="faq-item"><div class="faq-q">多久能看到效果？</div><div class="faq-a">基础GEO优化7-14天开始生效，深度代运营30天可见明显变化，持续优化效果越来越好。</div></div>
+    <div class="faq-item"><div class="faq-q">合约托管是什么意思？</div><div class="faq-a">你的钱不进商家口袋，锁定在区块链智能合约里。服务完成后资金自动释放，不满意可申请退款，全程可追踪。</div></div>
+    <div class="faq-item"><div class="faq-q">适合什么商家？</div><div class="faq-a">适合所有依赖本地流量的商家——美业、餐饮、牙科、教育、健身、宠物等，任何需要被AI推荐的本地商家。</div></div>
+    <div class="faq-item"><div class="faq-q">USDT怎么获取？</div><div class="faq-a">在TP钱包或币安购买USDT，转到BSC链上即可。9.9 USDT体验版只需最低成本就能看效果。</div></div>
+  </div>
+
 </div>
-<div class="foot">
-  杭州九运智领科技有限公司 · GEO优化服务<br>
-  <a href="index.html" style="color:#999;text-decoration:none">首页</a> · 
-  <a href="geo-diagnosis.html" style="color:#999;text-decoration:none">GEO诊断</a> · 
-  <a href="chain-identity.html" style="color:#999;text-decoration:none">可信认证</a>
-  <br><span style="color:#bbb">📞 19357138113 · 💬 微信 One1913U</span>
-</div>
+
+<footer>
+  <p>© 2026 FlyAgent · 杭州九运智领科技有限公司</p>
+  <p>
+    <a href="/privacy.html">隐私政策</a>
+    <a href="/terms.html">服务条款</a>
+    <a href="https://bscscan.com/address/0xea4daa3100a767e86fded867729ae7446476eba6" target="_blank">合约验证</a>
+  </p>
+</footer>
+
 <script>
-// ===== ERC-8183 合约地址 (BSC Mainnet) =====
+// ===== ERC-8183 合约常量 =====
 const COMMERCE='0xea4daa3100a767e86fded867729ae7446476eba6';
 const ROUTER='0x51895229e12f9876011789b04f8698af06ccd6da';
 const POLICY='0x9c01845705b3078aa2e8cff7520a6376fd766de5';
@@ -229,45 +291,34 @@ const PROVIDER='0x5460BeEd186E1b3786713AFf6eD71962C1CBE931';
 
 let sel=null,prov,jobId=null;
 
-// ===== ERC-8183 ABI — 来自BNBAgent SDK官方 + AgentEscrow参考 =====
-// 参照 bnbagent-sdk/abis/AgenticCommerce.json 提取
 const COMMERCE_ABI=[
-  // createJob: SDK happy.py 第1步 — 创建托管订单
   'function createJob(address provider, address evaluator, uint256 expiredAt, string description, address hook) returns (uint256 jobId)',
-  // setBudget: SDK happy.py 第3步 — 设定托管金额
   'function setBudget(uint256 jobId, uint256 amount, bytes optParams)',
-  // fund: SDK happy.py 第5步 — 资金锁定进合约托管
   'function fund(uint256 jobId, uint256 expectedBudget, bytes optParams)',
-  // paymentToken: 查询合约接受的支付代币
   'function paymentToken() view returns (address)',
-  // getJob: 查询订单状态
   'function getJob(uint256 jobId) view returns (tuple(uint256 id, address client, address provider, address evaluator, string description, uint256 budget, uint256 expiredAt, uint8 status, address hook, uint256 submittedAt, bytes32 deliverable))'
 ];
-const ROUTER_ABI=[
-  // registerJob: SDK happy.py 第2步 — 绑定保障策略
-  'function registerJob(uint256 jobId, address policy)'
-];
+const ROUTER_ABI=['function registerJob(uint256 jobId, address policy)'];
 const ERC20_ABI=[
-  // approve: SDK happy.py 第4步 — 授权合约划转USDT
   'function approve(address spender, uint256 value) returns (bool)',
-  // allowance: 检查已有授权额度，避免重复授权
   'function allowance(address owner, address spender) view returns (uint256)',
   'function balanceOf(address account) view returns (uint256)'
 ];
 
-// ===== ethers.js 接口初始化 =====
-let commerceIface, routerIface, erc20Iface;
-try {
-  commerceIface = new ethers.utils.Interface(COMMERCE_ABI);
-  routerIface = new ethers.utils.Interface(ROUTER_ABI);
-  erc20Iface = new ethers.utils.Interface(ERC20_ABI);
-} catch(e) { console.error('ethers.js init failed:', e); }
+let commerceIface,routerIface,erc20Iface;
+try{commerceIface=new ethers.utils.Interface(COMMERCE_ABI);routerIface=new ethers.utils.Interface(ROUTER_ABI);erc20Iface=new ethers.utils.Interface(ERC20_ABI)}catch(e){console.error('ethers init failed:',e)}
 
-// ===== 工具函数 =====
 function fp(){return window.tokenpocket?.ethereum||window.ethereum||window.web3?.currentProvider||null}
-
-// USDT是18位小数（BSC上的USDT）
 function tw(u){const p=u.toString().split('.');return ethers.BigNumber.from(p[0]+(p[1]||'').padEnd(18,'0').substring(0,18))}
+
+// ===== 统一卡片事件绑定（兼容TP钱包DApp浏览器）=====
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('click',function(e){e.preventDefault();sc(this)});
+    card.addEventListener('touchend',function(e){e.preventDefault();sc(this)});
+    card.style.cursor='pointer';
+  });
+});
 
 function sc(el){
   document.querySelectorAll('.card').forEach(c=>c.classList.remove('sel'));
@@ -276,221 +327,145 @@ function sc(el){
   b.disabled=false;
   b.textContent='合约托管支付 '+sel+' USDT';
   b.style.display='block';
-  // 移动端触觉反馈
-  if(navigator.vibrate) navigator.vibrate(50);
-  console.log('[Fly] 选中套餐:', sel, 'USDT, 按钮已激活');
+  if(navigator.vibrate)navigator.vibrate(50);
+  console.log('[Fly] 选中套餐:',sel,'USDT');
 }
 
 function gs(n){
-  for(let i=1;i<=3;i++){
-    document.getElementById('d'+i).className=n>i?'dt d':n===i?'dt a':'dt';
-  }
-  document.getElementById('p1').className=n===1?'':'h';
+  document.getElementById('p1').style.display=n===1?'block':'none';
   document.getElementById('p2').className=n===2?'':'h';
   document.getElementById('p3').className=n===3?'':'h';
 }
 
-// 更新5步进度条
-function updateStep(done, active){
+function updateStep(done,active){
   for(let i=1;i<=5;i++){
     const el=document.getElementById('s'+i);
-    el.className = i<=done ? 'step done' : i===active ? 'step active' : 'step';
+    el.className=i<=done?'step done':i===active?'step active':'step';
   }
 }
 
-function setStatus(html){const s=document.getElementById('st');s.className='st on';s.innerHTML=html;}
-function setError(msg){setStatus('<span class="err">❌</span> '+msg);}
+function setStatus(html){const s=document.getElementById('st');s.className='st on';s.innerHTML=html}
+function setError(msg){setStatus('<span class="err">❌</span> '+msg)}
 
-// ===== 发送交易并等待链上确认 =====
-async function sendTx(txData, stepLabel){
-  const accounts = await prov.request({method:'eth_requestAccounts'});
-  const from = accounts[0];
-  const txHash = await prov.request({
-    method:'eth_sendTransaction',
-    params:[{from, to:txData.to, data:txData.data, value:'0x0'}]
-  });
+async function sendTx(txData,stepLabel){
+  const accounts=await prov.request({method:'eth_requestAccounts'});
+  const from=accounts[0];
+  const txHash=await prov.request({method:'eth_sendTransaction',params:[{from,to:txData.to,data:txData.data,value:'0x0'}]});
   setStatus('⏳ '+stepLabel+' 确认中...<br><a class="lk" href="https://bscscan.com/tx/'+txHash+'" target="_blank">'+txHash.slice(0,18)+'...</a>');
-  // 轮询等待交易确认（最多3分钟）
   for(let i=0;i<60;i++){
     await new Promise(r=>setTimeout(r,3000));
     const rc=await prov.request({method:'eth_getTransactionReceipt',params:[txHash]});
-    if(rc){
-      if(rc.status==='0x1') return {txHash, receipt:rc};
-      throw new Error(stepLabel+' 交易失败');
-    }
+    if(rc){if(rc.status==='0x1')return{txHash,receipt:rc};throw new Error(stepLabel+' 交易失败')}
   }
   throw new Error(stepLabel+' 确认超时');
 }
 
-// ===== 从createJob回执中解析JobCreated事件获取jobId =====
-// 事件签名: JobCreated(uint256,address,address,address,uint256,string,address)
 function parseJobId(receipt){
-  if(!receipt || !receipt.logs) return null;
-  const topic0 = ethers.utils.id('JobCreated(uint256,address,address,address,uint256,string,address)');
+  if(!receipt||!receipt.logs)return null;
+  const topic0=ethers.utils.id('JobCreated(uint256,address,address,address,uint256,string,address)');
   for(const log of receipt.logs){
-    if(log.topics && log.topics[0]===topic0){
-      // topics[1] = jobId (uint256, indexed)
-      return ethers.BigNumber.from(log.topics[1]).toNumber();
-    }
+    if(log.topics&&log.topics[0]===topic0){return ethers.BigNumber.from(log.topics[1]).toNumber()}
   }
   return null;
 }
 
-// ===== 初始化：连接钱包 =====
 async function init(){
   const wi=document.getElementById('wi');
-  await new Promise(r=>setTimeout(r,1000));
+  await new Promise(r=>setTimeout(r,800));
   prov=fp();
   if(!prov){
-    wi.innerHTML='❌ 未检测到钱包<br><span style="font-size:11px;color:#999">请用TP钱包/Trust Wallet/MetaMask的DApp浏览器打开</span><br><span style="font-size:11px;color:#999">也可先浏览套餐内容</span>';
-    document.getElementById('cards').style.display='block';
+    wi.innerHTML='⚠️ 未检测到钱包 · 请用TP钱包DApp浏览器打开<br><span style="font-size:11px;color:var(--text4)">也可先浏览套餐内容</span>';
+    document.getElementById('buyBtn').textContent='请用TP钱包DApp浏览器打开';
     return;
   }
   try{
     const a=await prov.request({method:'eth_requestAccounts'});
-    if(!a?.length) throw 0;
+    if(!a?.length)throw 0;
     let c=await prov.request({method:'eth_chainId'});
     if(c!=='0x38'){
       try{await prov.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]})}
       catch(e){await prov.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:['https://bsc.publicnode.com'],blockExplorerUrls:['https://bscscan.com']}]})}
       c=await prov.request({method:'eth_chainId'});
     }
-    wi.innerHTML='✅ <b>'+a[0].slice(0,6)+'...'+a[0].slice(38)+'</b>'+(c==='0x38'?' · 已连接':' · ⚠️请切换网络');
-    document.getElementById('cards').style.display='block';
-    document.getElementById('buyBtn').style.display='block';
-    document.getElementById('dots').style.display='flex';
-    document.getElementById('stepProgress').style.display='flex';
+    wi.innerHTML='✅ <b>'+a[0].slice(0,6)+'...'+a[0].slice(38)+'</b>'+(c==='0x38'?' · BSC已连接':' · ⚠️请切换BSC网络');
+    wi.style.borderColor='rgba(34,197,113,.15)';
   }catch(e){
-    wi.innerHTML='❌ 连接失败，请刷新';
-    document.getElementById('cards').style.display='block';
+    wi.innerHTML='❌ 钱包连接失败，请刷新重试';
   }
 }
 
-// ===== ERC-8183 5步合约托管支付 =====
-// 严格按照 BNBAgent SDK happy.py 的5步流程：
-// createJob → registerJob → setBudget → approve+fund
 async function erc8183_pay(){
-  if(!sel) return;
+  if(!sel||!prov)return;
   const b=document.getElementById('buyBtn');
-  b.disabled=true;
-  updateStep(0,0);
+  b.disabled=true;updateStep(0,0);
 
-  const amountWei = tw(sel); // USDT 18位小数
-  const expiredAt = Math.floor(Date.now()/1000) + 7*24*3600; // 7天过期
-  const description = 'Fly GEO服务 - '+sel+' USDT套餐';
+  const amountWei=tw(sel);
+  const expiredAt=Math.floor(Date.now()/1000)+7*24*3600;
+  const description='Fly GEO服务 - '+sel+' USDT套餐';
 
   try{
-    // ===== 第1步：createJob — 创建托管订单 =====
-    // 对应SDK: client.create_job(provider=..., expired_at=..., description=...)
-    updateStep(0,1);
-    b.textContent='第1步/5：创建订单...';
-    setStatus('⏳ 正在创建托管订单，请在钱包中确认...<br><span style="font-size:11px;color:#999">这会创建一个合约托管订单，你的钱还在你口袋</span>');
-
-    const createData = commerceIface.encodeFunctionData('createJob',[
-      PROVIDER,       // provider: Fly服务方地址
-      ROUTER,         // evaluator: EvaluatorRouter合约
-      expiredAt,      // expiredAt: 7天后过期
-      description,    // description: 订单描述
-      ROUTER          // hook: Router合约（SDK默认evaluator=hook=Router）
-    ]);
-    const step1 = await sendTx({to:COMMERCE, data:createData}, '创建订单');
-    jobId = parseJobId(step1.receipt);
-    if(!jobId){
-      throw new Error('无法获取订单号。交易已上链：<a class="lk" href="https://bscscan.com/tx/'+step1.txHash+'" target="_blank">查看</a>');
-    }
-    console.log('✅ Job created, jobId=', jobId);
+    updateStep(0,1);b.textContent='第1步/5：创建订单...';
+    setStatus('⏳ 正在创建托管订单，请在钱包中确认...<br><span style="font-size:11px;color:var(--text3)">创建托管订单，你的钱还在你口袋</span>');
+    const createData=commerceIface.encodeFunctionData('createJob',[PROVIDER,ROUTER,expiredAt,description,ROUTER]);
+    const step1=await sendTx({to:COMMERCE,data:createData},'创建订单');
+    jobId=parseJobId(step1.receipt);
+    if(!jobId)throw new Error('无法获取订单号。<a class="lk" href="https://bscscan.com/tx/'+step1.txHash+'" target="_blank">查看交易</a>');
     updateStep(1,0);
 
-    // ===== 第2步：registerJob — 注册保障策略 =====
-    // 对应SDK: client.register_job(job_id)  → binds OptimisticPolicy
-    updateStep(1,2);
-    b.textContent='第2步/5：注册保障...';
-    setStatus('✅ 订单已创建 (Job #'+jobId+')<br>⏳ 正在注册保障策略，请在钱包中确认...<br><span style="font-size:11px;color:#999">这会让订单获得争议退款保障</span>');
-
-    const registerData = routerIface.encodeFunctionData('registerJob',[jobId, POLICY]);
-    await sendTx({to:ROUTER, data:registerData}, '注册保障');
-    console.log('✅ Job registered to OptimisticPolicy');
+    updateStep(1,2);b.textContent='第2步/5：注册保障...';
+    setStatus('✅ 订单已创建 (Job #'+jobId+')<br>⏳ 正在注册保障策略...');
+    const registerData=routerIface.encodeFunctionData('registerJob',[jobId,POLICY]);
+    await sendTx({to:ROUTER,data:registerData},'注册保障');
     updateStep(2,0);
 
-    // ===== 第3步：setBudget — 设定托管金额 =====
-    // 对应SDK: client.set_budget(job_id, budget)
-    updateStep(2,3);
-    b.textContent='第3步/5：设定托管金额...';
-    setStatus('✅ 保障策略已注册<br>⏳ 正在设定托管金额 ('+sel+' USDT)，请在钱包中确认...<br><span style="font-size:11px;color:#999">设定你同意托管的金额上限</span>');
-
-    const setBudgetData = commerceIface.encodeFunctionData('setBudget',[jobId, amountWei, '0x']);
-    await sendTx({to:COMMERCE, data:setBudgetData}, '设定托管金额');
-    console.log('✅ Budget set:', sel, 'USDT');
+    updateStep(2,3);b.textContent='第3步/5：设定托管金额...';
+    setStatus('✅ 保障已注册<br>⏳ 正在设定托管金额 ('+sel+' USDT)...');
+    const setBudgetData=commerceIface.encodeFunctionData('setBudget',[jobId,amountWei,'0x']);
+    await sendTx({to:COMMERCE,data:setBudgetData},'设定托管金额');
     updateStep(3,0);
 
-    // ===== 第4步：approve — 授权合约划转USDT =====
-    // 对应SDK: client.fund() 内部自动检测allowance并approve
-    updateStep(3,4);
-    b.textContent='第4步/5：授权托管...';
-    setStatus('✅ 托管金额已设定<br>⏳ 正在授权USDT托管，请在钱包中确认...<br><span style="font-size:11px;color:#999">授权合约从你的钱包划转USDT（不会自动扣款）</span>');
-
-    // 先检查现有授权额度（SDK的floor-based策略）
-    const accounts = await prov.request({method:'eth_requestAccounts'});
-    const owner = accounts[0];
-    const allowanceData = erc20Iface.encodeFunctionData('allowance',[owner, COMMERCE]);
-    const allowanceResult = await prov.request({
-      method:'eth_call',
-      params:[{to:USDT, data:allowanceData},'latest']
-    });
-    const currentAllowance = ethers.BigNumber.from(allowanceResult);
-
-    // SDK默认approve_floor=100 USDT，我们用同样的策略
+    updateStep(3,4);b.textContent='第4步/5：授权托管...';
+    setStatus('✅ 托管金额已设定<br>⏳ 正在授权USDT托管...');
+    const accounts=await prov.request({method:'eth_requestAccounts'});const owner=accounts[0];
+    const allowanceData=erc20Iface.encodeFunctionData('allowance',[owner,COMMERCE]);
+    const allowanceResult=await prov.request({method:'eth_call',params:[{to:USDT,data:allowanceData},'latest']});
+    const currentAllowance=ethers.BigNumber.from(allowanceResult);
     if(currentAllowance.lt(amountWei)){
-      const floor = ethers.BigNumber.from('100000000000000000000'); // 100 USDT
-      const approveAmount = amountWei.gt(floor) ? amountWei : floor;
-      const approveData = erc20Iface.encodeFunctionData('approve',[COMMERCE, approveAmount]);
-      await sendTx({to:USDT, data:approveData}, '授权托管');
-      console.log('✅ USDT approved:', ethers.utils.formatUnits(approveAmount, 18));
-    } else {
-      console.log('✅ Sufficient allowance already:', ethers.utils.formatUnits(currentAllowance, 18));
-      setStatus('✅ 已有足够授权额度，跳过授权步骤');
+      const floor=ethers.BigNumber.from('100000000000000000000');
+      const approveAmount=amountWei.gt(floor)?amountWei:floor;
+      const approveData=erc20Iface.encodeFunctionData('approve',[COMMERCE,approveAmount]);
+      await sendTx({to:USDT,data:approveData},'授权托管');
     }
     updateStep(4,0);
 
-    // ===== 第5步：fund — 资金锁定进合约托管 =====
-    // 对应SDK: client.fund(job_id, budget) — 钱从用户钱包转入合约
-    updateStep(4,5);
-    b.textContent='第5步/5：资金锁定...';
-    setStatus('✅ 授权完成<br>⏳ 正在锁定资金到托管合约，请在钱包中确认...<br><span style="font-size:11px;color:#999">资金锁定后，服务完成才会释放给商家</span>');
-
-    const fundData = commerceIface.encodeFunctionData('fund',[jobId, amountWei, '0x']);
-    const step5 = await sendTx({to:COMMERCE, data:fundData}, '资金锁定');
-    console.log('✅ Funds escrowed! Job is now FUNDED');
+    updateStep(4,5);b.textContent='第5步/5：资金锁定...';
+    setStatus('✅ 授权完成<br>⏳ 正在锁定资金到托管合约...');
+    const fundData=commerceIface.encodeFunctionData('fund',[jobId,amountWei,'0x']);
+    const step5=await sendTx({to:COMMERCE,data:fundData},'资金锁定');
     updateStep(5,0);
 
-    // ===== 全部5步完成！ =====
     setStatus('🎉 托管支付完成！<br>订单号：<b>FLY-'+jobId+'</b><br>资金已锁定，服务完成后自动释放<br><a class="lk" href="https://bscscan.com/tx/'+step5.txHash+'" target="_blank">查看托管交易 →</a>');
-    b.textContent='✅ 托管完成，请填写店铺信息';
-    b.disabled=false;
-    b.onclick=function(){gs(2);};
+    b.textContent='✅ 托管完成，请填写店铺信息';b.disabled=false;
+    b.onclick=function(){gs(2)};
 
   }catch(e){
     let m=e.message||String(e);
-    if(/denied|reject|cancel/i.test(m)) m='您取消了确认';
-    else if(/insufficient/i.test(m)) m='余额不足';
-    else if(/交易失败/.test(m)) m=m;
+    if(/denied|reject|cancel/i.test(m))m='您取消了确认';
+    else if(/insufficient/i.test(m))m='余额不足';
     else m='操作失败：'+m.slice(0,100);
-    setError(m);
-    b.disabled=false;
+    setError(m);b.disabled=false;
     b.textContent='重新托管支付 '+sel+' USDT';
-    b.onclick=function(){erc8183_pay();};
+    b.onclick=function(){erc8183_pay()};
   }
 }
 
-// ===== 提交店铺信息（存证上链） =====
 async function go(){
   const n=document.getElementById('fN').value,t=document.getElementById('fT').value;
   if(!n||!t){alert('请填写店铺名称和类型');return}
   const oid='FLY-'+(jobId||Date.now().toString(36).toUpperCase());
-  const d=JSON.stringify({id:oid,jobId:jobId,amt:sel,shop:{n,t,a:document.getElementById('fA').value,p:document.getElementById('fP').value},ts:Date.now()});
+  const d=JSON.stringify({id:oid,jobId,amt:sel,shop:{n,t,a:document.getElementById('fA').value,p:document.getElementById('fP').value},ts:Date.now()});
   try{
     const a=await prov.request({method:'eth_requestAccounts'}),f=a[0];
-    // 将店铺信息编码上链存证
     const hx='0x'+Array.from(new TextEncoder().encode('FLY:'+d)).map(b=>b.toString(16).padStart(2,'0')).join('');
     const otx=await prov.request({method:'eth_sendTransaction',params:[{from:f,to:f,data:hx,value:'0x0'}]});
     gs(3);
@@ -501,51 +476,39 @@ async function go(){
     document.getElementById('rL').href='https://bscscan.com/address/'+COMMERCE;
     document.getElementById('diagBtn').style.display='inline-block';
   }catch(e){
-    // 钱包不可用时本地保存
     let or=JSON.parse(localStorage.getItem('fly_orders')||'[]');
-    or.push({id:oid,jobId,d});localStorage.setItem('fly_orders',JSON.stringify(or));
+    or.push({oid,jobId,amt:sel,shop:{n,t},ts:Date.now()});
+    localStorage.setItem('fly_orders',JSON.stringify(or));
     gs(3);
-    document.getElementById('rP').textContent='本地记录';
-    document.getElementById('diagBtn').style.display='inline-block';
     document.getElementById('rI').textContent=oid;
     document.getElementById('rJ').textContent=jobId||'—';
     document.getElementById('rL').href='https://bscscan.com/address/'+COMMERCE;
+    document.getElementById('diagBtn').style.display='inline-block';
   }
 }
 
-// ===== 调用Agent Server获取AI诊断报告 =====
 async function fetchDiagnosis(){
+  const name=document.getElementById('fN').value,type=document.getElementById('fT').value;
+  const addr=document.getElementById('fA').value;
+  if(!name){alert('请先填写店铺名称');return}
   const btn=document.getElementById('diagBtn');
   const div=document.getElementById('diagReport');
-  btn.disabled=true; btn.textContent='AI正在生成诊断报告...';
-  const name=document.getElementById('fN').value||'';
-  const type=document.getElementById('fT').value||'';
-  const addr=document.getElementById('fA').value||'';
+  btn.disabled=true;btn.textContent='⏳ AI正在生成诊断报告...';
   const pkgMap={'9.9':'starter','59':'basic','299':'pro','999':'enterprise'};
   const pkg=pkgMap[sel]||'starter';
   try{
-    const r=await fetch('https://fly-agent-server.vercel.app/geo-diagnosis?store_name='+encodeURIComponent(name)+'&industry='+encodeURIComponent(type)+'&address='+encodeURIComponent(addr)+'&package_type='+pkg);
-    if(!r.ok) throw new Error('API返回'+r.status);
+    const r=await fetch('https://fly-agent-server.vercel.app/geo-diagnosis?shop_name='+encodeURIComponent(name)+'&industry='+encodeURIComponent(type)+'&address='+encodeURIComponent(addr)+'&package_type='+pkg);
+    if(!r.ok)throw new Error('API返回'+r.status);
     const d=await r.json();
     if(d.success&&d.report){
-      div.style.display='block'; div.textContent=d.report;
-      btn.textContent='✅ 诊断报告已生成'; btn.disabled=false;
-    } else { throw new Error(d.detail||'生成失败'); }
+      div.style.display='block';div.textContent=d.report;
+      btn.textContent='✅ 诊断报告已生成';btn.disabled=false;
+    }else{throw new Error(d.detail||'生成失败')}
   }catch(e){
-    div.style.display='block'; div.textContent='⚠️ 诊断生成失败：'+e.message+'\n\n请稍后访问 fly-agent.xyz 获取报告';
-    btn.textContent='重新获取'; btn.disabled=false;
+    div.style.display='block';div.textContent='⚠️ 诊断生成失败：'+e.message+'\n\n请稍后访问 fly-agent.xyz 获取报告';
+    btn.textContent='重新获取';btn.disabled=false;
   }
 }
-
-// ===== 统一卡片事件绑定（兼容TP钱包DApp浏览器）=====
-document.addEventListener('DOMContentLoaded', function(){
-  document.querySelectorAll('.card').forEach(function(card){
-    // 同时绑定click和touchend，确保移动端响应
-    card.addEventListener('click', function(e){ e.preventDefault(); sc(this); });
-    card.addEventListener('touchend', function(e){ e.preventDefault(); sc(this); });
-    card.style.cursor = 'pointer';
-  });
-});
 
 init();
 </script>
