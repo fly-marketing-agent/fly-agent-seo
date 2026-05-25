@@ -355,7 +355,13 @@ function setError(msg){setStatus('<span class="err">❌</span> '+msg)}
 async function sendTx(txData,stepLabel){
   const accounts=await prov.request({method:'eth_requestAccounts'});
   const from=accounts[0];
-  const txHash=await prov.request({method:'eth_sendTransaction',params:[{from,to:txData.to,data:txData.data,value:'0x0'}]});
+  // 先用eth_estimateGas获取gasLimit，TP钱包要求必须传gas
+  let gasHex='0x493e0';
+  try{
+    const est=await prov.request({method:'eth_estimateGas',params:[{from,to:txData.to,data:txData.data,value:'0x0'}]});
+    gasHex='0x'+(parseInt(est,16)*15/10|0).toString(16);
+  }catch(e){console.log('[Fly] estimateGas failed, using default:',e)}
+  const txHash=await prov.request({method:'eth_sendTransaction',params:[{from,to:txData.to,data:txData.data,value:'0x0',gas:gasHex}]});
   setStatus('⏳ '+stepLabel+' 确认中...<br><a class="lk" href="https://bscscan.com/tx/'+txHash+'" target="_blank">'+txHash.slice(0,18)+'...</a>');
   for(let i=0;i<60;i++){
     await new Promise(r=>setTimeout(r,3000));
