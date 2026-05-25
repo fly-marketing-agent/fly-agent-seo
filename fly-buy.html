@@ -318,6 +318,9 @@ document.addEventListener('DOMContentLoaded',function(){
     card.addEventListener('touchend',function(e){e.preventDefault();sc(this)});
     card.style.cursor='pointer';
   });
+  var bb=document.getElementById('buyBtn');
+  bb.addEventListener('click',function(){if(!bb.disabled&&sel)erc8183_pay()});
+  bb.addEventListener('touchend',function(e){e.preventDefault();if(!bb.disabled&&sel)erc8183_pay()});
 });
 
 function sc(el){
@@ -327,6 +330,7 @@ function sc(el){
   b.disabled=false;
   b.textContent='合约托管支付 '+sel+' USDT';
   b.style.display='block';
+  b.onclick=function(){erc8183_pay()};
   if(navigator.vibrate)navigator.vibrate(50);
   console.log('[Fly] 选中套餐:',sel,'USDT');
 }
