@@ -282,282 +282,610 @@ footer a{color:var(--text3);margin:0 8px}
 </footer>
 
 <script>
-// ===== ERC-8183 合约常量 =====
-const COMMERCE='0xea4daa3100a767e86fded867729ae7446476eba6';
-const ROUTER='0x51895229e12f9876011789b04f8698af06ccd6da';
-const POLICY='0x9c01845705b3078aa2e8cff7520a6376fd766de5';
-const USDT='0xcE24439F2D9C6a2289F741120FE202248B666666';
-const PROVIDER='0x5460BeEd186E1b3786713AFf6eD71962C1CBE931';
+// ===== ERC-8183 合约交互 - TP钱包DApp浏览器优化版 =====
 
-let sel=null,prov,jobId=null;
+// 合约地址 (BSC Mainnet)
+const COMMERCE = '0xea4daa3100a767e86fded867729ae7446476eba6';
+const ROUTER = '0x51895229e12f9876011789b04f8698af06ccd6da';
+const POLICY = '0x9c01845705b3078aa2e8cff7520a6376fd766de5';
+const USDT = '0xcE24439F2D9C6a2289F741120FE202248B666666';
+const PROVIDER = '0x5460BeEd186E1b3786713AFf6eD71962C1CBE931';
 
-const COMMERCE_ABI=[
+// 合约ABI定义
+const COMMERCE_ABI = [
   'function createJob(address provider, address evaluator, uint256 expiredAt, string description, address hook) returns (uint256 jobId)',
-  'function setBudget(uint256 jobId, uint256 amount, bytes optParams)',
-  'function fund(uint256 jobId, uint256 expectedBudget, bytes optParams)',
+  'function setBudget(uint256 jobId, uint256 amount, bytes calldata optParams)',
+  'function fund(uint256 jobId, uint256 expectedBudget, bytes calldata optParams)',
   'function paymentToken() view returns (address)',
   'function getJob(uint256 jobId) view returns (tuple(uint256 id, address client, address provider, address evaluator, string description, uint256 budget, uint256 expiredAt, uint8 status, address hook, uint256 submittedAt, bytes32 deliverable))'
 ];
-const ROUTER_ABI=['function registerJob(uint256 jobId, address policy)'];
-const ERC20_ABI=[
+
+const ROUTER_ABI = [
+  'function registerJob(uint256 jobId, address policy)'
+];
+
+const ERC20_ABI = [
   'function approve(address spender, uint256 value) returns (bool)',
   'function allowance(address owner, address spender) view returns (uint256)',
   'function balanceOf(address account) view returns (uint256)'
 ];
 
-let commerceIface,routerIface,erc20Iface;
-try{commerceIface=new ethers.utils.Interface(COMMERCE_ABI);routerIface=new ethers.utils.Interface(ROUTER_ABI);erc20Iface=new ethers.utils.Interface(ERC20_ABI)}catch(e){console.error('ethers init failed:',e)}
+// 全局状态
+let sel = null;
+let prov = null;
+let jobId = null;
+let signer = null;
+let commerce = null;
+let router = null;
+let usdt = null;
 
-function fp(){return window.tokenpocket?.ethereum||window.ethereum||window.web3?.currentProvider||null}
-function tw(u){const p=u.toString().split('.');return ethers.BigNumber.from(p[0]+(p[1]||'').padEnd(18,'0').substring(0,18))}
+// ===== 钱包检测 =====
+function fp() {
+  return window.tokenpocket?.ethereum || window.ethereum || window.web3?.currentProvider || null;
+}
 
-// ===== 统一卡片事件绑定（兼容TP钱包DApp浏览器）=====
-document.addEventListener('DOMContentLoaded',function(){
+// ===== 金额转换 =====
+function toWei(amount) {
+  const parts = amount.toString().split('.');
+  const whole = parts[0];
+  const decimal = (parts[1] || '').padEnd(18, '0').substring(0, 18);
+  return ethers.BigNumber.from(whole + decimal);
+}
+
+// ===== 卡片选择事件（只绑定.ck按钮）=====
+document.addEventListener('DOMContentLoaded', function() {
   // 只绑定勾选按钮，防止滑动误触
-  document.querySelectorAll('.card .ck').forEach(function(ck){
-    ck.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();sc(this.parentElement)});
-    ck.addEventListener('touchend',function(e){e.stopPropagation();e.preventDefault();sc(this.parentElement)});
-    ck.style.cursor='pointer';
+  document.querySelectorAll('.card .ck').forEach(function(ck) {
+    ck.addEventListener('click', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      selectCard(this.parentElement);
+    });
+    ck.addEventListener('touchend', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      selectCard(this.parentElement);
+    });
+    ck.style.cursor = 'pointer';
   });
-  var bb=document.getElementById('buyBtn');
-  bb.addEventListener('click',function(){if(!bb.disabled&&sel)erc8183_pay()});
-  bb.addEventListener('touchend',function(e){e.preventDefault();if(!bb.disabled&&sel)erc8183_pay()});
+
+  var buyBtn = document.getElementById('buyBtn');
+  buyBtn.addEventListener('click', function() {
+    if (!buyBtn.disabled && sel) erc8183_pay();
+  });
+  buyBtn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    if (!buyBtn.disabled && sel) erc8183_pay();
+  });
 });
 
-function sc(el){
-  document.querySelectorAll('.card').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel');sel=parseFloat(el.dataset.amt);
-  const b=document.getElementById('buyBtn');
-  b.disabled=false;
-  b.textContent='合约托管支付 '+sel+' U';
-  b.style.display='block';
-  b.onclick=function(){erc8183_pay()};
-  if(navigator.vibrate)navigator.vibrate(50);
-  console.log('[Fly] 选中套餐:',sel,'U');
+function selectCard(el) {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  sel = parseFloat(el.dataset.amt);
+  const b = document.getElementById('buyBtn');
+  b.disabled = false;
+  b.textContent = '合约托管支付 ' + sel + ' U';
+  b.style.display = 'block';
+  b.onclick = function() { erc8183_pay(); };
+  if (navigator.vibrate) navigator.vibrate(50);
+  console.log('[Fly] 选中套餐:', sel, 'U');
 }
 
-function gs(n){
-  document.getElementById('p1').style.display=n===1?'block':'none';
-  document.getElementById('p2').className=n===2?'':'h';
-  document.getElementById('p3').className=n===3?'':'h';
+function gs(n) {
+  document.getElementById('p1').style.display = n === 1 ? 'block' : 'none';
+  document.getElementById('p2').className = n === 2 ? '' : 'h';
+  document.getElementById('p3').className = n === 3 ? '' : 'h';
 }
 
-function updateStep(done,active){
-  for(let i=1;i<=5;i++){
-    const el=document.getElementById('s'+i);
-    el.className=i<=done?'step done':i===active?'step active':'step';
+// ===== 进度步骤更新 =====
+function updateStep(done, active) {
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('s' + i);
+    el.className = i <= done ? 'step done' : i === active ? 'step active' : 'step';
   }
 }
 
-function setStatus(html){const s=document.getElementById('st');s.className='st on';s.innerHTML=html}
-function setError(msg){setStatus('<span class="err">❌</span> '+msg)}
-
-async function sendTx(txData,stepLabel){
-  const accounts=await prov.request({method:'eth_requestAccounts'});
-  const from=accounts[0];
-  // 先用eth_estimateGas获取gasLimit，TP钱包要求必须传gas
-  let gasHex='0x493e0';
-  try{
-    const est=await prov.request({method:'eth_estimateGas',params:[{from,to:txData.to,data:txData.data,value:'0x0'}]});
-    gasHex='0x'+(parseInt(est,16)*15/10|0).toString(16);
-  }catch(e){console.log('[Fly] estimateGas failed, using default:',e)}
-  const txHash=await prov.request({method:'eth_sendTransaction',params:[{from,to:txData.to,data:txData.data,value:'0x0',gas:gasHex}]});
-  setStatus('⏳ '+stepLabel+' 确认中...<br><a class="lk" href="https://bscscan.com/tx/'+txHash+'" target="_blank">'+txHash.slice(0,18)+'...</a>');
-  for(let i=0;i<60;i++){
-    await new Promise(r=>setTimeout(r,3000));
-    const rc=await prov.request({method:'eth_getTransactionReceipt',params:[txHash]});
-    if(rc){if(rc.status==='0x1')return{txHash,receipt:rc};throw new Error(stepLabel+' 交易失败')}
-  }
-  throw new Error(stepLabel+' 确认超时');
+function setStatus(html) {
+  const s = document.getElementById('st');
+  s.className = 'st on';
+  s.innerHTML = html;
 }
 
-function parseJobId(receipt,txHash){
-  if(!receipt||!receipt.logs)return null;
-  // 方法1: 匹配event topic
-  const topic0=ethers.utils.id('JobCreated(uint256,address,address,address,uint256,address)');
-  for(const log of receipt.logs){
-    if(log.topics&&log.topics[0]===topic0){return ethers.BigNumber.from(log.topics[1]).toNumber()}
-  }
-  // 方法2: 遍历所有logs，找Commerce合约发出的、topics>=2的log，取topics[1]作为jobId
-  for(const log of receipt.logs){
-    if(log.address&&log.address.toLowerCase()===COMMERCE.toLowerCase()&&log.topics&&log.topics.length>=2){
-      try{return ethers.BigNumber.from(log.topics[1]).toNumber()}catch(e){}
-    }
-  }
-  // 方法3: 从交易input data解析返回值（某些钱包不返回完整logs）
-  if(txHash){
-    try{
-      // fallback: 通过RPC直接查交易receipt
-      return null;
-    }catch(e){}
-  }
-  return null;
+function setError(msg) {
+  setStatus('<span class="err">❌</span> ' + msg);
 }
 
-async function fetchJobIdFromRpc(txHash){
-  // 通过BSC RPC直接查receipt，绕过TP钱包的日志格式问题
-  try{
-    const resp=await fetch('https://bsc.rpc.blxrbdn.com',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({jsonrpc:'2.0',method:'eth_getTransactionReceipt',params:[txHash],id:1})
+// ===== 交易发送（TP钱包优化版：带gas估算）=====
+async function sendTx(tx, stepLabel) {
+  const accounts = await prov.request({ method: 'eth_requestAccounts' });
+  const from = accounts[0];
+
+  // TP钱包必须带gas，先估算再乘1.5安全系数
+  let gasLimit = '0x493e0'; // 默认300000
+  try {
+    const estimateParams = {
+      from: from,
+      to: tx.to || tx.to,
+      data: tx.data,
+      value: tx.value || '0x0'
+    };
+    const estimated = await prov.request({
+      method: 'eth_estimateGas',
+      params: [estimateParams]
     });
-    const j=await resp.json();
-    if(j.result&&j.result.logs){
-      const topic0=ethers.utils.id('JobCreated(uint256,address,address,address,uint256,address)');
-      for(const log of j.result.logs){
-        if(log.topics&&log.topics[0]===topic0){return ethers.BigNumber.from(log.topics[1]).toNumber()}
-      }
-      for(const log of j.result.logs){
-        if(log.address&&log.address.toLowerCase()===COMMERCE.toLowerCase()&&log.topics&&log.topics.length>=2){
-          try{return ethers.BigNumber.from(log.topics[1]).toNumber()}catch(e){}
+    const estimatedNum = parseInt(estimated, 16);
+    const gasWithBuffer = Math.floor(estimatedNum * 1.5);
+    gasLimit = '0x' + gasWithBuffer.toString(16);
+    console.log('[Fly] Gas估算:', estimatedNum, '→ 使用:', gasWithBuffer);
+  } catch (e) {
+    console.log('[Fly] estimateGas失败，使用默认值:', e.message || e);
+  }
+
+  // TP钱包eth_sendTransaction必须带gas
+  const txParams = {
+    from: from,
+    to: tx.to,
+    data: tx.data,
+    value: tx.value || '0x0',
+    gas: gasLimit
+  };
+
+  console.log('[Fly] 发送交易:', stepLabel, '→', tx.to);
+  const txHash = await prov.request({
+    method: 'eth_sendTransaction',
+    params: [txParams]
+  });
+
+  setStatus('⏳ ' + stepLabel + ' 确认中...<br><a class="lk" href="https://bscscan.com/tx/' + txHash + '" target="_blank">' + txHash.slice(0, 18) + '...</a>');
+
+  // 等待交易确认（最多60轮，每轮3秒）
+  for (let i = 0; i < 60; i++) {
+    await new Promise(r => setTimeout(r, 3000));
+    try {
+      const rc = await prov.request({
+        method: 'eth_getTransactionReceipt',
+        params: [txHash]
+      });
+      if (rc) {
+        if (rc.status === '0x1') {
+          return { txHash, receipt: rc };
+        } else {
+          throw new Error(stepLabel + ' 交易失败（状态码0）');
         }
       }
+    } catch (e) {
+      console.log('[Fly] 查询receipt失败:', e);
     }
-  }catch(e){console.log('[Fly] RPC fallback failed:',e)}
+  }
+  throw new Error(stepLabel + ' 确认超时');
+}
+
+// ===== 解析JobId（多重fallback）=====
+async function parseJobId(receipt, txHash) {
+  if (!receipt || !receipt.logs) {
+    console.log('[Fly] receipt无logs，尝试RPC查询...');
+    return await fetchJobIdFromRpc(txHash);
+  }
+
+  // 方法1: 精确匹配JobCreated event
+  // event JobCreated(uint256 indexed jobId, address indexed client, address provider, address evaluator, uint256 budget, address indexed paymentToken)
+  const topic0 = ethers.utils.id('JobCreated(uint256,address,address,address,uint256,address)');
+  console.log('[Fly] 查找topic0:', topic0);
+
+  for (const log of receipt.logs) {
+    if (log.topics && log.topics[0] === topic0) {
+      try {
+        const jobIdFromTopic = ethers.BigNumber.from(log.topics[1]).toNumber();
+        console.log('[Fly] 从topic[1]解析到jobId:', jobIdFromTopic);
+        return jobIdFromTopic;
+      } catch (e) {
+        console.log('[Fly] topic[1]解析失败:', e);
+      }
+    }
+  }
+
+  // 方法2: 找Commerce合约发出的、topics>=2的log
+  for (const log of receipt.logs) {
+    if (log.address && log.address.toLowerCase() === COMMERCE.toLowerCase() && log.topics && log.topics.length >= 2) {
+      try {
+        const jobIdFromLog = ethers.BigNumber.from(log.topics[1]).toNumber();
+        console.log('[Fly] 从Commerce log解析到jobId:', jobIdFromLog);
+        return jobIdFromLog;
+      } catch (e) {
+        console.log('[Fly] Commerce log解析失败:', e);
+      }
+    }
+  }
+
+  // 方法3: 通过RPC查询（绕过TP钱包日志格式问题）
+  console.log('[Fly] 前两种方法失败，尝试RPC查询...');
+  return await fetchJobIdFromRpc(txHash);
+}
+
+// ===== 通过公共RPC查询JobId =====
+async function fetchJobIdFromRpc(txHash) {
+  const rpcUrls = [
+    'https://bsc.publicnode.com',
+    'https://rpc.ankr.com/bsc',
+    'https://bsc-dataseed.binance.org'
+  ];
+
+  const topic0 = ethers.utils.id('JobCreated(uint256,address,address,address,uint256,address)');
+
+  for (const rpcUrl of rpcUrls) {
+    try {
+      const resp = await fetch(rpcUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'eth_getTransactionReceipt',
+          params: [txHash],
+          id: 1
+        })
+      });
+      const j = await resp.json();
+      if (j.result && j.result.logs) {
+        for (const log of j.result.logs) {
+          if (log.topics && log.topics[0] === topic0) {
+            const jobId = ethers.BigNumber.from(log.topics[1]).toNumber();
+            console.log('[Fly] RPC查询到jobId:', jobId);
+            return jobId;
+          }
+        }
+        for (const log of j.result.logs) {
+          if (log.address && log.address.toLowerCase() === COMMERCE.toLowerCase() && log.topics && log.topics.length >= 2) {
+            const jobId = ethers.BigNumber.from(log.topics[1]).toNumber();
+            console.log('[Fly] RPC Commerce查询到jobId:', jobId);
+            return jobId;
+          }
+        }
+      }
+    } catch (e) {
+      console.log('[Fly] RPC', rpcUrl, '查询失败:', e.message || e);
+    }
+  }
+
   return null;
 }
 
-async function init(){
-  const wi=document.getElementById('wi');
-  await new Promise(r=>setTimeout(r,800));
-  prov=fp();
-  if(!prov){
-    wi.innerHTML='⚠️ 未检测到钱包 · 请用TP钱包DApp浏览器打开<br><span style="font-size:11px;color:var(--text4)">也可先浏览套餐内容</span>';
-    document.getElementById('buyBtn').textContent='请用TP钱包DApp浏览器打开';
+// ===== 初始化合约对象 =====
+async function initContracts() {
+  if (!prov) return false;
+
+  try {
+    const accounts = await prov.request({ method: 'eth_requestAccounts' });
+    if (!accounts?.length) return false;
+
+    // 创建ethers Provider
+    const provider = new ethers.providers.Web3Provider(prov);
+    signer = provider.getSigner();
+
+    // 创建合约对象
+    commerce = new ethers.Contract(COMMERCE, COMMERCE_ABI, signer);
+    router = new ethers.Contract(ROUTER, ROUTER_ABI, signer);
+    usdt = new ethers.Contract(USDT, ERC20_ABI, signer);
+
+    console.log('[Fly] 合约对象初始化完成');
+    console.log('[Fly] Commerce:', commerce.address);
+    console.log('[Fly] Router:', router.address);
+    console.log('[Fly] USDT:', usdt.address);
+
+    return true;
+  } catch (e) {
+    console.error('[Fly] 合约初始化失败:', e);
+    return false;
+  }
+}
+
+// ===== 钱包初始化 =====
+async function init() {
+  const wi = document.getElementById('wi');
+  await new Promise(r => setTimeout(r, 800));
+
+  prov = fp();
+  if (!prov) {
+    wi.innerHTML = '⚠️ 未检测到钱包 · 请用TP钱包DApp浏览器打开<br><span style="font-size:11px;color:var(--text4)">也可先浏览套餐内容</span>';
+    document.getElementById('buyBtn').textContent = '请用TP钱包DApp浏览器打开';
     return;
   }
-  try{
-    const a=await prov.request({method:'eth_requestAccounts'});
-    if(!a?.length)throw 0;
-    let c=await prov.request({method:'eth_chainId'});
-    if(c!=='0x38'){
-      try{await prov.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]})}
-      catch(e){await prov.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:['https://bsc.publicnode.com'],blockExplorerUrls:['https://bscscan.com']}]})}
-      c=await prov.request({method:'eth_chainId'});
+
+  try {
+    const a = await prov.request({ method: 'eth_requestAccounts' });
+    if (!a?.length) throw new Error('无账户');
+
+    // 检查并切换到BSC网络
+    let chainId = await prov.request({ method: 'eth_chainId' });
+    if (chainId !== '0x38') {
+      try {
+        await prov.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
+      } catch (e) {
+        // 尝试添加网络
+        await prov.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: '0x38',
+            chainName: 'BNB Smart Chain',
+            nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+            rpcUrls: ['https://bsc.publicnode.com'],
+            blockExplorerUrls: ['https://bscscan.com']
+          }]
+        });
+      }
+      chainId = await prov.request({ method: 'eth_chainId' });
     }
-    wi.innerHTML='✅ <b>'+a[0].slice(0,6)+'...'+a[0].slice(38)+'</b>'+(c==='0x38'?' · BSC已连接':' · ⚠️请切换BSC网络');
-    wi.style.borderColor='rgba(34,197,113,.15)';
-  }catch(e){
-    wi.innerHTML='❌ 钱包连接失败，请刷新重试';
+
+    wi.innerHTML = '✅ <b>' + a[0].slice(0, 6) + '...' + a[0].slice(38) + '</b>' +
+      (chainId === '0x38' ? ' · BSC已连接' : ' · ⚠️请切换BSC网络');
+    wi.style.borderColor = 'rgba(34,197,113,.15)';
+
+    // 初始化合约对象
+    await initContracts();
+
+  } catch (e) {
+    console.error('[Fly] 钱包初始化失败:', e);
+    wi.innerHTML = '❌ 钱包连接失败，请刷新重试';
   }
 }
 
-async function erc8183_pay(){
-  if(!sel||!prov)return;
-  const b=document.getElementById('buyBtn');
-  b.disabled=true;updateStep(0,0);
+// ===== ERC-8183 5步支付流程 =====
+async function erc8183_pay() {
+  if (!sel || !prov) {
+    setError('请先选择套餐并连接钱包');
+    return;
+  }
 
-  const amountWei=tw(sel);
-  const expiredAt=Math.floor(Date.now()/1000)+7*24*3600;
-  const description='Fly GEO服务 - '+sel+' U套餐';
+  const b = document.getElementById('buyBtn');
+  b.disabled = true;
+  updateStep(0, 0);
 
-  try{
-    updateStep(0,1);b.textContent='第1步/5：创建订单...';
+  const amountWei = toWei(sel);
+  const expiredAt = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
+  const description = 'Fly GEO服务 - ' + sel + ' U套餐';
+
+  console.log('[Fly] 开始支付流程，金额:', sel, 'U = ', amountWei.toString());
+
+  try {
+    // ========== 第1步: createJob ==========
+    updateStep(0, 1);
+    b.textContent = '第1步/5：创建订单...';
     setStatus('⏳ 正在创建托管订单，请在钱包中确认...<br><span style="font-size:11px;color:var(--text3)">创建托管订单，你的钱还在你口袋</span>');
-    const createData=commerceIface.encodeFunctionData('createJob',[PROVIDER,ROUTER,expiredAt,description,ROUTER]);
-    const step1=await sendTx({to:COMMERCE,data:createData},'创建订单');
-    jobId=parseJobId(step1.receipt,step1.txHash);
-    if(!jobId)throw new Error('无法获取订单号。<a class="lk" href="https://bscscan.com/tx/'+step1.txHash+'" target="_blank">查看交易</a>');
-    updateStep(1,0);
 
-    updateStep(1,2);b.textContent='第2步/5：注册保障...';
-    setStatus('✅ 订单已创建 (Job #'+jobId+')<br>⏳ 正在注册保障策略...');
-    const registerData=routerIface.encodeFunctionData('registerJob',[jobId,POLICY]);
-    await sendTx({to:ROUTER,data:registerData},'注册保障');
-    updateStep(2,0);
+    console.log('[Fly] Step1: createJob', { provider: PROVIDER, router: ROUTER, expiredAt, description, hook: ROUTER });
 
-    updateStep(2,3);b.textContent='第3步/5：设定托管金额...';
-    setStatus('✅ 保障已注册<br>⏳ 正在设定托管金额 ('+sel+' U)...');
-    const setBudgetData=commerceIface.encodeFunctionData('setBudget',[jobId,amountWei,'0x']);
-    await sendTx({to:COMMERCE,data:setBudgetData},'设定托管金额');
-    updateStep(3,0);
+    const tx1 = await commerce.createJob(PROVIDER, ROUTER, expiredAt, description, ROUTER);
+    setStatus('⏳ 创建订单交易已发送，等待确认...<br><a class="lk" href="https://bscscan.com/tx/' + tx1.hash + '" target="_blank">' + tx1.hash.slice(0, 18) + '...</a>');
+    const receipt1 = await tx1.wait();
 
-    updateStep(3,4);b.textContent='第4步/5：授权托管...';
-    setStatus('✅ 托管金额已设定<br>⏳ 正在授权U托管...');
-    const accounts=await prov.request({method:'eth_requestAccounts'});const owner=accounts[0];
-    const allowanceData=erc20Iface.encodeFunctionData('allowance',[owner,COMMERCE]);
-    const allowanceResult=await prov.request({method:'eth_call',params:[{to:USDT,data:allowanceData},'latest']});
-    const currentAllowance=ethers.BigNumber.from(allowanceResult);
-    if(currentAllowance.lt(amountWei)){
-      const floor=ethers.BigNumber.from('100000000000000000000');
-      const approveAmount=amountWei.gt(floor)?amountWei:floor;
-      const approveData=erc20Iface.encodeFunctionData('approve',[COMMERCE,approveAmount]);
-      await sendTx({to:USDT,data:approveData},'授权托管');
+    // 解析JobId
+    jobId = await parseJobId(receipt1, tx1.hash);
+    if (!jobId) {
+      throw new Error('无法获取订单号。请到 <a class="lk" href="https://bscscan.com/tx/' + tx1.hash + '" target="_blank">BscScan</a> 查看交易记录');
     }
-    updateStep(4,0);
 
-    updateStep(4,5);b.textContent='第5步/5：资金锁定...';
+    console.log('[Fly] JobId获取成功:', jobId);
+    updateStep(1, 0);
+
+    // ========== 第2步: registerJob via Router ==========
+    updateStep(1, 2);
+    b.textContent = '第2步/5：注册保障...';
+    setStatus('✅ 订单已创建 (Job #' + jobId + ')<br>⏳ 正在注册保障策略...');
+
+    console.log('[Fly] Step2: registerJob', { jobId, policy: POLICY });
+
+    const tx2 = await router.registerJob(jobId, POLICY);
+    setStatus('⏳ 注册保障交易确认中...<br><a class="lk" href="https://bscscan.com/tx/' + tx2.hash + '" target="_blank">' + tx2.hash.slice(0, 18) + '...</a>');
+    await tx2.wait();
+
+    updateStep(2, 0);
+
+    // ========== 第3步: setBudget via Commerce ==========
+    updateStep(2, 3);
+    b.textContent = '第3步/5：设定托管金额...';
+    setStatus('✅ 保障已注册<br>⏳ 正在设定托管金额 (' + sel + ' U)...');
+
+    console.log('[Fly] Step3: setBudget', { jobId, amount: amountWei.toString() });
+
+    const tx3 = await commerce.setBudget(jobId, amountWei, '0x');
+    setStatus('⏳ 设定托管金额确认中...<br><a class="lk" href="https://bscscan.com/tx/' + tx3.hash + '" target="_blank">' + tx3.hash.slice(0, 18) + '...</a>');
+    await tx3.wait();
+
+    updateStep(3, 0);
+
+    // ========== 第4步: approve (0 -> amount) via U Token ==========
+    updateStep(3, 4);
+    b.textContent = '第4步/5：授权托管...';
+    setStatus('✅ 托管金额已设定<br>⏳ 正在授权U代币托管...');
+
+    const accounts = await prov.request({ method: 'eth_requestAccounts' });
+    const owner = accounts[0];
+
+    // 检查当前授权额度
+    const currentAllowance = await usdt.allowance(owner, COMMERCE);
+    console.log('[Fly] 当前授权额度:', currentAllowance.toString());
+
+    if (currentAllowance.lt(amountWei)) {
+      // 需要重新授权：先approve(0)再approve(amount)
+      console.log('[Fly] Step4a: approve(0) 清除旧授权');
+
+      // 如果当前有授权，先清零
+      if (!currentAllowance.isZero()) {
+        setStatus('⏳ 清除旧授权...');
+        const tx4a = await usdt.approve(COMMERCE, 0);
+        setStatus('⏳ 清除授权确认中...<br><a class="lk" href="https://bscscan.com/tx/' + tx4a.hash + '" target="_blank">' + tx4a.hash.slice(0, 18) + '...</a>');
+        await tx4a.wait();
+        console.log('[Fly] 旧授权已清除');
+      }
+
+      // 授权新金额（使用较大值确保足够）
+      console.log('[Fly] Step4b: approve(' + amountWei.toString() + ')');
+
+      // 最低授权100 U，防止小额授权问题
+      const minApprove = ethers.BigNumber.from('100000000000000000000'); // 100 U
+      const approveAmount = amountWei.gt(minApprove) ? amountWei : minApprove;
+
+      setStatus('⏳ 授权U代币 (' + (approveAmount.eq(amountWei) ? sel + ' U' : '≥' + sel + ' U') + ')...');
+      const tx4b = await usdt.approve(COMMERCE, approveAmount);
+      setStatus('⏳ 授权确认中...<br><a class="lk" href="https://bscscan.com/tx/' + tx4b.hash + '" target="_blank">' + tx4b.hash.slice(0, 18) + '...</a>');
+      await tx4b.wait();
+
+      console.log('[Fly] 授权完成，授权额度:', approveAmount.toString());
+    } else {
+      console.log('[Fly] 已有足够授权，跳过approve');
+    }
+
+    updateStep(4, 0);
+
+    // ========== 第5步: fund via Commerce ==========
+    updateStep(4, 5);
+    b.textContent = '第5步/5：资金锁定...';
     setStatus('✅ 授权完成<br>⏳ 正在锁定资金到托管合约...');
-    const fundData=commerceIface.encodeFunctionData('fund',[jobId,amountWei,'0x']);
-    const step5=await sendTx({to:COMMERCE,data:fundData},'资金锁定');
-    updateStep(5,0);
 
-    setStatus('🎉 托管支付完成！<br>订单号：<b>FLY-'+jobId+'</b><br>资金已锁定，服务完成后自动释放<br><a class="lk" href="https://bscscan.com/tx/'+step5.txHash+'" target="_blank">查看托管交易 →</a>');
-    b.textContent='✅ 托管完成，请填写店铺信息';b.disabled=false;
-    b.onclick=function(){gs(2)};
+    console.log('[Fly] Step5: fund', { jobId, amount: amountWei.toString() });
 
-  }catch(e){
-    let m=e.message||String(e);
-    if(/denied|reject|cancel/i.test(m))m='您取消了确认';
-    else if(/insufficient/i.test(m))m='余额不足';
-    else m='操作失败：'+m.slice(0,100);
-    setError(m);b.disabled=false;
-    b.textContent='重新托管支付 '+sel+' U';
-    b.onclick=function(){erc8183_pay()};
-  }
-}
+    const tx5 = await commerce.fund(jobId, amountWei, '0x');
+    setStatus('⏳ 资金锁定确认中...<br><a class="lk" href="https://bscscan.com/tx/' + tx5.hash + '" target="_blank">' + tx5.hash.slice(0, 18) + '...</a>');
+    const receipt5 = await tx5.wait();
 
-async function go(){
-  const n=document.getElementById('fN').value,t=document.getElementById('fT').value;
-  if(!n||!t){alert('请填写店铺名称和类型');return}
-  const oid='FLY-'+(jobId||Date.now().toString(36).toUpperCase());
-  const d=JSON.stringify({id:oid,jobId,amt:sel,shop:{n,t,a:document.getElementById('fA').value,p:document.getElementById('fP').value},ts:Date.now()});
-  try{
-    const a=await prov.request({method:'eth_requestAccounts'}),f=a[0];
-    const hx='0x'+Array.from(new TextEncoder().encode('FLY:'+d)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    const otx=await prov.request({method:'eth_sendTransaction',params:[{from:f,to:f,data:hx,value:'0x0'}]});
+    updateStep(5, 0);
+
+    // ===== 支付完成 =====
+    setStatus('🎉 托管支付完成！<br>订单号：<b>FLY-' + jobId + '</b><br>资金已锁定，服务完成后自动释放<br><a class="lk" href="https://bscscan.com/tx/' + tx5.hash + '" target="_blank">查看托管交易 →</a>');
+
+    b.textContent = '✅ 托管完成，请填写店铺信息';
+    b.disabled = false;
+    b.onclick = function() { gs(2); };
+
+    document.getElementById('rP').textContent = tx5.hash.slice(0, 18) + '...';
+    document.getElementById('rP').href = 'https://bscscan.com/tx/' + tx5.hash;
+    document.getElementById('rJ').textContent = jobId;
     gs(3);
-    document.getElementById('rP').textContent=otx?otx.slice(0,18)+'...':'';
-    document.getElementById('rP').href=otx?'https://bscscan.com/tx/'+otx:'#';
-    document.getElementById('rI').textContent=oid;
-    document.getElementById('rJ').textContent=jobId||'—';
-    document.getElementById('rL').href='https://bscscan.com/address/'+COMMERCE;
-    document.getElementById('diagBtn').style.display='inline-block';
-  }catch(e){
-    let or=JSON.parse(localStorage.getItem('fly_orders')||'[]');
-    or.push({oid,jobId,amt:sel,shop:{n,t},ts:Date.now()});
-    localStorage.setItem('fly_orders',JSON.stringify(or));
+
+  } catch (e) {
+    console.error('[Fly] 支付流程异常:', e);
+
+    let msg = e.message || String(e);
+
+    // 友好错误提示
+    if (/user denied|rejected|cancel/i.test(msg)) {
+      msg = '您取消了交易确认';
+    } else if (/insufficient|balance/i.test(msg)) {
+      msg = '余额不足，请确认钱包里有足够的BNB和U代币';
+    } else if (/expired|deadline/i.test(msg)) {
+      msg = '交易超时，请重试';
+    } else if (/nonce/i.test(msg)) {
+      msg = '交易序号错误，请刷新页面重试';
+    } else if (/execution reverted/i.test(msg)) {
+      // 提取revert原因
+      const match = msg.match(/reason string (.+)/i) || msg.match(/\"([^\"]+)\"/);
+      if (match) {
+        msg = '合约错误：' + (match[1] || match[0]);
+      } else {
+        msg = '合约执行失败，可能是授权或余额问题';
+      }
+    } else {
+      msg = '操作失败：' + msg.slice(0, 150);
+    }
+
+    setError(msg + '<br><span style="font-size:11px;color:var(--text3)">详情请查看浏览器控制台</span>');
+    b.disabled = false;
+    b.textContent = '重新托管支付 ' + sel + ' U';
+    b.onclick = function() { erc8183_pay(); };
+  }
+}
+
+// ===== 店铺信息提交 =====
+async function go() {
+  const n = document.getElementById('fN').value;
+  const t = document.getElementById('fT').value;
+  if (!n || !t) {
+    alert('请填写店铺名称和类型');
+    return;
+  }
+
+  const oid = 'FLY-' + (jobId || Date.now().toString(36).toUpperCase());
+  const d = JSON.stringify({
+    id: oid,
+    jobId,
+    amt: sel,
+    shop: {
+      n,
+      t,
+      a: document.getElementById('fA').value,
+      p: document.getElementById('fP').value,
+      m: document.getElementById('fM').value
+    },
+    ts: Date.now()
+  });
+
+  try {
+    const a = await prov.request({ method: 'eth_requestAccounts' });
+    const f = a[0];
+    const hx = '0x' + Array.from(new TextEncoder().encode('FLY:' + d)).map(b => b.toString(16).padStart(2, '0')).join('');
+    const otx = await prov.request({ method: 'eth_sendTransaction', params: [{ from: f, to: f, data: hx, value: '0x0', gas: '0x100000' }] });
     gs(3);
-    document.getElementById('rI').textContent=oid;
-    document.getElementById('rJ').textContent=jobId||'—';
-    document.getElementById('rL').href='https://bscscan.com/address/'+COMMERCE;
-    document.getElementById('diagBtn').style.display='inline-block';
+    document.getElementById('rP').textContent = otx ? otx.slice(0, 18) + '...' : '';
+    document.getElementById('rP').href = otx ? 'https://bscscan.com/tx/' + otx : '#';
+    document.getElementById('rI').textContent = oid;
+    document.getElementById('rJ').textContent = jobId || '—';
+    document.getElementById('rL').href = 'https://bscscan.com/address/' + COMMERCE;
+    document.getElementById('diagBtn').style.display = 'inline-block';
+  } catch (e) {
+    // 即使链上记录失败，也保存到本地
+    let or = JSON.parse(localStorage.getItem('fly_orders') || '[]');
+    or.push({ oid, jobId, amt: sel, shop: { n, t, a: document.getElementById('fA').value }, ts: Date.now() });
+    localStorage.setItem('fly_orders', JSON.stringify(or));
+    gs(3);
+    document.getElementById('rI').textContent = oid;
+    document.getElementById('rJ').textContent = jobId || '—';
+    document.getElementById('rL').href = 'https://bscscan.com/address/' + COMMERCE;
+    document.getElementById('diagBtn').style.display = 'inline-block';
   }
 }
 
-async function fetchDiagnosis(){
-  const name=document.getElementById('fN').value,type=document.getElementById('fT').value;
-  const addr=document.getElementById('fA').value;
-  if(!name){alert('请先填写店铺名称');return}
-  const btn=document.getElementById('diagBtn');
-  const div=document.getElementById('diagReport');
-  btn.disabled=true;btn.textContent='⏳ AI正在生成诊断报告...';
-  const pkgMap={'9.9':'starter','59':'basic','299':'pro','999':'enterprise'};
-  const pkg=pkgMap[sel]||'starter';
-  try{
-    const r=await fetch('https://fly-agent-server.vercel.app/geo-diagnosis?shop_name='+encodeURIComponent(name)+'&industry='+encodeURIComponent(type)+'&address='+encodeURIComponent(addr)+'&package_type='+pkg);
-    if(!r.ok)throw new Error('API返回'+r.status);
-    const d=await r.json();
-    if(d.success&&d.report){
-      div.style.display='block';div.textContent=d.report;
-      btn.textContent='✅ 诊断报告已生成';btn.disabled=false;
-    }else{throw new Error(d.detail||'生成失败')}
-  }catch(e){
-    div.style.display='block';div.textContent='⚠️ 诊断生成失败：'+e.message+'\n\n请稍后访问 fly-agent.xyz 获取报告';
-    btn.textContent='重新获取';btn.disabled=false;
+// ===== AI诊断报告 =====
+async function fetchDiagnosis() {
+  const name = document.getElementById('fN').value;
+  const type = document.getElementById('fT').value;
+  const addr = document.getElementById('fA').value;
+
+  if (!name) {
+    alert('请先填写店铺名称');
+    return;
+  }
+
+  const btn = document.getElementById('diagBtn');
+  const div = document.getElementById('diagReport');
+
+  btn.disabled = true;
+  btn.textContent = '⏳ AI正在生成诊断报告...';
+  const pkgMap = { '9.9': 'starter', '59': 'basic', '299': 'pro', '999': 'enterprise' };
+  const pkg = pkgMap[sel] || 'starter';
+
+  try {
+    const r = await fetch('https://fly-agent-server.vercel.app/geo-diagnosis?shop_name=' + encodeURIComponent(name) + '&industry=' + encodeURIComponent(type) + '&address=' + encodeURIComponent(addr) + '&package_type=' + pkg);
+
+    if (!r.ok) throw new Error('API返回' + r.status);
+
+    const d = await r.json();
+    if (d.success && d.report) {
+      div.style.display = 'block';
+      div.textContent = d.report;
+      btn.textContent = '✅ 诊断报告已生成';
+      btn.disabled = false;
+    } else {
+      throw new Error(d.detail || '生成失败');
+    }
+  } catch (e) {
+    div.style.display = 'block';
+    div.textContent = '⚠️ 诊断生成失败：' + e.message + '\n\n请稍后访问 fly-agent.xyz 获取报告';
+    btn.textContent = '重新获取';
+    btn.disabled = false;
   }
 }
 
+// 页面加载完成后初始化
 init();
 </script>
 </body>
