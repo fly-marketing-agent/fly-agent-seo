@@ -470,13 +470,13 @@ async function erc8183_pay(){
     setStatus('✅ 托管金额已设定<br>⏳ 正在授权U托管...');
     const accounts=await prov.request({method:'eth_requestAccounts'});const owner=accounts[0];
     const allowanceData=erc20Iface.encodeFunctionData('allowance',[owner,COMMERCE]);
-    const allowanceResult=await prov.request({method:'eth_call',params:[{to:U,data:allowanceData},'latest']});
+    const allowanceResult=await prov.request({method:'eth_call',params:[{to:USDT,data:allowanceData},'latest']});
     const currentAllowance=ethers.BigNumber.from(allowanceResult);
     if(currentAllowance.lt(amountWei)){
       const floor=ethers.BigNumber.from('100000000000000000000');
       const approveAmount=amountWei.gt(floor)?amountWei:floor;
       const approveData=erc20Iface.encodeFunctionData('approve',[COMMERCE,approveAmount]);
-      await sendTx({to:U,data:approveData},'授权托管');
+      await sendTx({to:USDT,data:approveData},'授权托管');
     }
     updateStep(4,0);
 
