@@ -277,7 +277,7 @@ footer a{color:var(--text3);margin:0 8px}
   <p>
     <a href="/privacy.html">隐私政策</a>
     <a href="/terms.html">服务条款</a>
-    <a href="https://bscscan.com/address/0xea4daa3100a767e86fded867729ae7446476eba6" target="_blank">合约验证</a>
+    <a href="https://bscscan.com/address/0x7D7043bC1a308e245e56C8FbD9144FCdf2285aA1" target="_blank">合约验证</a>
   </p>
 </footer>
 
@@ -369,7 +369,7 @@ function selectCard(el) {
   b.style.display = 'block';
   b.onclick = function() { erc8183_pay(); };
   if (navigator.vibrate) navigator.vibrate(50);
-  console.log('[Fly] 选中套餐:', sel, 'U');
+  console.log('[Fly] 选中套餐:', sel, 'USDT');
 }
 
 function gs(n) {
@@ -684,7 +684,7 @@ async function erc8183_pay() {
     const accts = await prov.request({ method: 'eth_requestAccounts' });
     const owner = accts[0];
 
-    // 检查U余额
+    // 检查USDT余额
     const uBal = await usdt.balanceOf(owner);
     if (uBal.lt(amountWei)) {
       throw new Error('USDT余额不足（当前 ' + ethers.utils.formatUnits(uBal, 18).slice(0, 8) + ' U，需要 ' + sel + ' U），请先在TP钱包中转入USDT');
@@ -724,7 +724,7 @@ async function erc8183_pay() {
     // ========== 第3步: setBudget ==========
     updateStep(2, 3);
     b.textContent = '第3步/5：设定托管金额...';
-    setStatus('✅ 保障已注册<br>⏳ 正在设定托管金额 (' + sel + ' U)...');
+    setStatus('✅ 保障已注册<br>⏳ 正在设定托管金额 (' + sel + ' USDT)...');
 
     await cSend(commerce, 'setBudget', [jobId, amountWei, '0x'], '设定托管金额');
     console.log('[Fly] ✅ Step3完成');
