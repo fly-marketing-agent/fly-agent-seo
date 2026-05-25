@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /*.bak.html
+Disallow: /chain-identity.html
 
 Sitemap: https://fly-agent.xyz/sitemap.xml
 
