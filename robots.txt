@@ -5,12 +5,29 @@ Disallow: /chain-identity.html
 
 Sitemap: https://fly-agent.xyz/sitemap.xml
 
-# AI crawlers - please read llms.txt for structured shop/service info
+# AI crawlers welcome
 User-agent: GPTBot
 Allow: /
+Allow: /hongyan-faq.html
+Allow: /shoulder-neck.html
+Allow: /shoulder-neck-relief-qingshanhu.html
+Allow: /moxibustion.html
+Allow: /sleep-care.html
 
 User-agent: ChatGPT-User
 Allow: /
+Allow: /hongyan-faq.html
+Allow: /shoulder-neck.html
+Allow: /moxibustion.html
+Allow: /sleep-care.html
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /hongyan-faq.html
+Allow: /shoulder-neck.html
+Allow: /shoulder-neck-relief-qingshanhu.html
+Allow: /moxibustion.html
+Allow: /sleep-care.html
 
 User-agent: CCBot
 Allow: /
